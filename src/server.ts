@@ -27,6 +27,14 @@ const client = new Client({
 
 let assignmentsStack: Array<db.Assignment>=[];
 
+function IsInvalidResponse($: cheerio.Root){
+    if($("#courseville-login-w-platform-cu-button").length!=0){
+        adminDM.send("Cookie is invalid");
+        throw new Error("Cookie is invalid");
+    }
+    return false;
+}
+
 async function updateCourses(){
     if(process.env["COOKIE"]==undefined){
         return;
@@ -38,6 +46,10 @@ async function updateCourses(){
         }
     }).then(res=>res.text());
     const $ = cheerio.load(response);
+    // if it tells you to login
+    if(IsInvalidResponse($)){
+        return;
+    }
     $(`#courseville-courseicongroup-icon-lineup-${targetYear}-${targetSemester}-join a`).each(async (i,ele)=>{
         let course:db.Course={
             year: parseInt($(ele).attr("year")!),
@@ -63,6 +75,10 @@ async function updateAssignments(mcvID:number){
         }
     }).then(res=>res.text())
     const $ = cheerio.load(response);
+    // if it tells you to login
+    if(IsInvalidResponse($)){
+        return;
+    }
     const assignmentsList = $(("#cv-assignment-table tbody tr td:nth-child(2) a")).toArray();
     for(let i=0;i<assignmentsList.length;i++){
         // console.log($(assignmentsList[i]).text())
@@ -190,7 +206,7 @@ client.on("interactionCreate",async (interaction)=>{
     }
 })
 
-// updateAssignments(46113)
+// updateCourses();
 
 client.login(process.env["DISCORD_TOKEN"])
 app.get("/",(req,res)=>{

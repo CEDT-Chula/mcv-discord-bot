@@ -65,6 +65,13 @@ const client = new discord_js_1.Client({
     ]
 });
 let assignmentsStack = [];
+function IsInvalidResponse($) {
+    if ($("#courseville-login-w-platform-cu-button").length != 0) {
+        adminDM.send("Cookie is invalid");
+        throw new Error("Cookie is invalid");
+    }
+    return false;
+}
 function updateCourses() {
     return __awaiter(this, void 0, void 0, function* () {
         if (process.env["COOKIE"] == undefined) {
@@ -77,6 +84,10 @@ function updateCourses() {
             }
         }).then(res => res.text());
         const $ = cheerio.load(response);
+        // if it tells you to login
+        if (IsInvalidResponse($)) {
+            return;
+        }
         $(`#courseville-courseicongroup-icon-lineup-${targetYear}-${targetSemester}-join a`).each((i, ele) => __awaiter(this, void 0, void 0, function* () {
             let course = {
                 year: parseInt($(ele).attr("year")),
@@ -102,6 +113,10 @@ function updateAssignments(mcvID) {
             }
         }).then(res => res.text());
         const $ = cheerio.load(response);
+        // if it tells you to login
+        if (IsInvalidResponse($)) {
+            return;
+        }
         const assignmentsList = $(("#cv-assignment-table tbody tr td:nth-child(2) a")).toArray();
         for (let i = 0; i < assignmentsList.length; i++) {
             // console.log($(assignmentsList[i]).text())
@@ -251,7 +266,7 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         yield interaction.editReply("Error occured!");
     }
 }));
-// updateAssignments(46113)
+// updateCourses();
 client.login(process.env["DISCORD_TOKEN"]);
 app.get("/", (req, res) => {
     console.log("gg");
