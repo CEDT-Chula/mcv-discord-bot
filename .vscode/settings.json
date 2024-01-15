@@ -1,5 +1,5 @@
 {
     "code-runner.executorMap": {
-        "typescript": "tsc && node ./build/src/server.js"
+        "typescript": "ts-node ./src/index.ts"
     },
 }

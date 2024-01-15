@@ -1,0 +1,24 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model Assignment{
+    mcvCourseID     Int     
+    course          Course  @relation(fields:[mcvCourseID], references: [mcvID])
+    assignmentName  String  @id @db.VarChar(255)
+}
+model Course{
+    mcvID       Int         @id
+    courseID    String      @db.VarChar(255)
+    title       String      @db.VarChar(500)
+    year        Int     
+    semester    Int
+    assignments Assignment[]
+}
+model NotificationChannel{
+    guildID     String  @db.VarChar(255) @id
+    channelID   String  @db.VarChar(255)
+}
+generator client {
+  provider = "prisma-client-js"
+}
