@@ -19,6 +19,15 @@ export async function assignmentExists(assignment: Assignment): Promise<boolean>
     return found!=null;
 }
 
+export async function channelOfGuildExists(channel: NotificationChannel): Promise<boolean>{
+    let found = await prisma.notificationChannel.findFirst({
+        where: {
+            guildID: channel.guildID
+        }
+    });
+    return found!=null;
+}
+
 export async function getAllChannels(): Promise<NotificationChannel[]> {
     return await prisma.notificationChannel.findMany();
 }
@@ -35,9 +44,13 @@ export async function getCourse(mcvID: number){
     })
 }
 
-// export async function insertInto(table:string,object:any){
-//     await prisma[table].create(object)
-// }
+export async function getChannelOfGuild(guildID: string): Promise<NotificationChannel | null>{
+    return await prisma.notificationChannel.findFirst({
+        where: {
+            guildID
+        }
+    });
+}
 
 export async function saveCourse(obj:Course){
     await prisma.course.create({
@@ -51,25 +64,19 @@ export async function saveAssignment(obj:Assignment){
     })
 }
 
+export async function saveChannel(obj:NotificationChannel){
+    await prisma.notificationChannel.create({
+        data:obj
+    })
+}
+
+export async function unsetChannelOfGuild(guildID: string){
+    return await prisma.notificationChannel.delete({
+        where:{
+            guildID
+        }
+    })
+}
+
+export type Channel = NotificationChannel;
 export {Course,Assignment,NotificationChannel}
-
-// export Assignment;
-// export type Channel=notificationChannels;
-
-// export interface Course{
-//     mcvID: number,
-//     courseID: string,
-//     title: string,
-//     year: number,
-//     semester: number
-// }
-
-// export interface Assignment{
-//     mcvCourseID: number,
-//     assignmentName: string
-// }
-
-// export interface Channel{
-//     guildID: string,
-//     channelID: string
-// }
