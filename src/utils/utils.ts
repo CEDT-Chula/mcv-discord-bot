@@ -1,8 +1,9 @@
 import * as cheerio from "cheerio"
 import * as dotenv from "dotenv"
-import * as db from "./database"
-import {targetYear, targetSemester} from "./config"
-import {assignmentsStack} from "./index"
+import * as db from "../database/database"
+import {targetYear, targetSemester} from "../config/config"
+import {adminDM, assignmentsStack, client} from "../index"
+import { TextChannel } from "discord.js"
 dotenv.config({
     path:"./.env"
 })
@@ -60,6 +61,10 @@ export async function updateAssignments(mcvID:number){
     }
 }
 
+/**
+ * @description update assignments of each course
+ * @returns message containing new added assignments
+ */
 export async function update(){
     // updateCourses();
     let coursesList = await db.getAllCourses();
@@ -67,6 +72,7 @@ export async function update(){
         await updateAssignments(courses.mcvID);
     }
     let messageObject: any={};
+    console.log(assignmentsStack)
     if(assignmentsStack.length==0){
         return "";
     }
@@ -86,4 +92,24 @@ export async function update(){
         }
     }
     return message;
+}
+
+/**
+* @description update assignments and send message to all notification channels
+*  */
+export async function updateHandler(){
+   console.log("new interval starts "+(new Date()).toISOString())
+   let message = await update();
+   if(message==""){
+       return;
+   }
+   console.log("new assignments detected")
+   adminDM.send(message);
+   let channels = await db.getAllChannels();
+   for await (let channel of channels){
+        console.log(message)
+       let discordChannel = client.channels.cache.get(channel.channelID) as TextChannel;
+       adminDM.send(message);
+    //    discordChannel.send(message);
+   }
 }
