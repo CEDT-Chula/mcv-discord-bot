@@ -108,7 +108,7 @@ export async function updateHandler(){
    for await (let channel of channels){
         console.log(message)
        let discordChannel = client.channels.cache.get(channel.channelID) as TextChannel;
-       adminDM.send(message);
-    //    discordChannel.send(message);
+    //    adminDM.send(message);
+       discordChannel.send(message);
    }
 }
