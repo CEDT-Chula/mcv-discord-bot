@@ -104,7 +104,6 @@ export async function updateHandler(){
        return;
    }
    console.log("new assignments detected")
-   adminDM.send(message);
    let channels = await db.getAllChannels();
    for await (let channel of channels){
         console.log(message)
