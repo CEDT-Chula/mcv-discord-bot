@@ -16,6 +16,21 @@
     "tsc": "^2.0.4"
   },
   "scripts": {
+    "build": "npm install && prisma migrate dev",
     "start": "node build/src/server.js"
-  }
+  },
+  "name": "mcv-discord-bot",
+  "description": "Discord bot to notify my course ville assignments\r # how it works:\r - fetch courses to find added course\r - fetch assignments of each course, see if it is a new assignment -> put it in stack\r - pop each new assignments to create a message sent to notification channels",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NewBieCoderXD/mcv-discord-bot.git"
+  },
+  "author": "ggFROOK",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NewBieCoderXD/mcv-discord-bot/issues"
+  },
+  "homepage": "https://github.com/NewBieCoderXD/mcv-discord-bot#readme"
 }
