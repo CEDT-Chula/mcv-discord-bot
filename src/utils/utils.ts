@@ -8,7 +8,6 @@ dotenv.config({
     path:"./.env"
 })
 
-
 export async function updateCourses(){
     if(process.env["COOKIE"]==undefined){
         return;
@@ -16,11 +15,16 @@ export async function updateCourses(){
     let response = await fetch(`https://www.mycourseville.com/`,{
         method: "get",
         headers:{
-            Cookie:process.env["COOKIE"]
+            Cookie:process.env.COOKIE
         }
     }).then(res=>res.text());
     const $ = cheerio.load(response);
-    $(`#courseville-courseicongroup-icon-lineup-${targetYear}-${targetSemester}-join a`).each(async (i,ele)=>{
+    if(await IsInvalidResponse($)){
+        return;
+    }
+    let courses = $(`#courseville-courseicongroup-icon-lineup-${targetYear}-${targetSemester}-join a`).toArray();
+    for(let i=0;i<courses.length;i++){
+        let ele = courses[i];
         let course:db.Course={
             year: parseInt($(ele).attr("year")!),
             semester: parseInt($(ele).attr("semester")!),
@@ -34,8 +38,15 @@ export async function updateCourses(){
             // console.log("not found")
             db.saveCourse(course);
         }
+    }
+}
 
-    })
+async function IsInvalidResponse($: cheerio.Root){
+    if($("#courseville-login-w-platform-cu-button").length!=0){
+        await adminDM.send("Cookie is invalid");
+        throw new Error("Cookie is invalid");
+    }
+    return false;
 }
 
 export async function updateAssignments(mcvID:number){
@@ -46,6 +57,9 @@ export async function updateAssignments(mcvID:number){
         }
     }).then(res=>res.text())
     const $ = cheerio.load(response);
+    if(await IsInvalidResponse($)){
+        return;
+    }
     let assignments = $("#cv-assignment-table tbody tr td:nth-child(2) a").toArray()
     for(let i=0;i<assignments.length;i++){
         let ele = assignments[i];
@@ -55,6 +69,7 @@ export async function updateAssignments(mcvID:number){
         }
         let found=await db.assignmentExists(assignment);
         if(!found){
+            console.log("found new assignment")
             assignmentsStack.push(assignment);
             db.saveAssignment(assignment);
         }
@@ -98,12 +113,11 @@ export async function update(){
 * @description update assignments and send message to all notification channels
 *  */
 export async function updateHandler(){
-   console.log("new interval starts "+(new Date()).toISOString())
+   console.log("new interval starts "+(new Date()).toString())
    let message = await update();
    if(message==""){
        return;
    }
-   console.log("new assignments detected")
    let channels = await db.getAllChannels();
    for await (let channel of channels){
         console.log(message)

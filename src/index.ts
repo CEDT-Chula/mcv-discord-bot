@@ -64,7 +64,7 @@ async function start(){
 start();
 
 client.on("ready",async ()=>{
-    console.log("logged in "+(new Date()).toISOString());
+    console.log("logged in "+(new Date()).toString());
     adminDM = await client.users.createDM(process.env.ADMIN_USER_ID!);
     adminDM.send("server is up!");
 
