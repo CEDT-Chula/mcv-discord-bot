@@ -131,7 +131,7 @@ async function update(){
 // updateAssignments(37700);
 
 async function updateHandler(){
-    console.log("new interval starts "+(new Date()).toISOString())
+    console.log("new interval starts "+(new Date()).toString())
     let message = await update();
     if(message==""){
         return;
@@ -145,7 +145,7 @@ async function updateHandler(){
 }
 
 client.on("ready",async ()=>{
-    console.log("new commit logged in "+(new Date()).toISOString());
+    console.log("logged in "+(new Date()).toString());
     adminDM = await client.users.createDM(process.env["ADMIN_USER_ID"]!);
     adminDM.send("server is up!");
     await updateHandler();
@@ -208,9 +208,12 @@ client.on("interactionCreate",async (interaction)=>{
 
 // updateCourses();
 
-client.login(process.env["DISCORD_TOKEN"])
+client.on("debug",console.log);
+client.on("warn",console.log);
+
+client.login(process.env.DISCORD_TOKEN)
 app.get("/",(req,res)=>{
-    console.log("gg");
+    console.log("start listening to port 8080");
     res.status(200).send("");
 })
 app.listen("8080")
