@@ -211,7 +211,7 @@ client.on("interactionCreate",async (interaction)=>{
 client.on("debug",console.log);
 client.on("warn",console.log);
 
-client.login(process.env.DISCORD_TOKEN)
+client.login(process.env.DISCORD_TOKEN).then(console.log);
 app.get("/",(req,res)=>{
     console.log("start listening to port 8080");
     res.status(200).send("");
