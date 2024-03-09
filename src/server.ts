@@ -139,8 +139,9 @@ async function updateHandler(){
     // console.log("message "+message)
     let channels = db.notifyChannels.find();
     for await (let channel of channels){
-        let discordChannel = client.channels.cache.get(channel.channelID) as TextChannel;
+        let discordChannel = await client.channels.fetch(channel.channelID) as TextChannel;
         await discordChannel.send(message);
+        console.log(`channel ${channel.channelid} message sent`)
     }
 }
 
