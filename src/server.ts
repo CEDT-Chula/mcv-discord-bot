@@ -141,7 +141,7 @@ async function updateHandler(){
     for await (let channel of channels){
         let discordChannel = await client.channels.fetch(channel.channelID) as TextChannel;
         await discordChannel.send(message);
-        console.log(`channel ${channel.channelid} message sent`)
+        console.log(`channel ${channel.channelID} message sent`)
     }
 }
 
@@ -187,7 +187,7 @@ client.on("interactionCreate",async (interaction)=>{
             let result = await update();
             if(result!=""){
                 let channel = await db.getChannelFromGuild(interaction.guildId);
-                let discordChannel = client.channels.cache.get(channel?.channelID!) as TextChannel;
+                let discordChannel = await client.channels.fetch(channel?.channelID!) as TextChannel;
                 discordChannel.send(result);
                 await interaction.editReply("Done!");
                 return;
