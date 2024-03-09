@@ -147,7 +147,7 @@ async function updateHandler(){
 client.on("ready",async ()=>{
     console.log("logged in "+(new Date()).toString());
     adminDM = await client.users.createDM(process.env["ADMIN_USER_ID"]!);
-    adminDM.send("server is up!");
+    await adminDM.send("server is up!");
     await updateHandler();
     setInterval(updateHandler,intervalTime*60*1000);
 })
@@ -205,11 +205,6 @@ client.on("interactionCreate",async (interaction)=>{
         await interaction.editReply("Error occured!");
     }
 })
-
-// updateCourses();
-
-client.on("debug",console.log);
-client.on("warn",console.log);
 
 client.login(process.env.DISCORD_TOKEN).then(console.log);
 app.get("/",(req,res)=>{
