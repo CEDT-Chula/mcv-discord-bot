@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio"
 import * as dotenv from "dotenv"
 import * as db from "./database"
-import {Client, DMChannel, GatewayIntentBits, Interaction, TextChannel} from "discord.js"
+import {Client, DMChannel, GatewayIntentBits, Interaction, TextChannel, User} from "discord.js"
 import express, {Request,Response} from "express"
 dotenv.config({
     path:"./.env"
@@ -10,7 +10,7 @@ dotenv.config({
 const targetYear = 2023;
 const targetSemester = 2;
 
-let adminDM : DMChannel;
+let admin : User;
 
 /**
  * @description interval of updating in minutes
@@ -29,7 +29,7 @@ let assignmentsStack: Array<db.Assignment>=[];
 
 function IsInvalidResponse($: cheerio.Root){
     if($("#courseville-login-w-platform-cu-button").length!=0){
-        adminDM.send("Cookie is invalid");
+        admin.send("Cookie is invalid");
         throw new Error("Cookie is invalid");
     }
     return false;
@@ -147,8 +147,8 @@ async function updateHandler(){
 
 client.on("ready",async ()=>{
     console.log("logged in "+(new Date()).toString());
-    adminDM = await client.users.createDM(process.env["ADMIN_USER_ID"]!);
-    await adminDM.send("server is up!");
+    admin = await client.users.fetch(process.env.ADMIN_USER_ID!);
+    await admin.send("server is up!");
     await updateHandler();
     setInterval(updateHandler,intervalTime*60*1000);
 })
@@ -202,7 +202,7 @@ client.on("interactionCreate",async (interaction)=>{
     }
     catch(e){
         console.log(e);
-        adminDM.send((e as any).stack)
+        await admin.send((e as any).stack)
         await interaction.editReply("Error occured!");
     }
 })
