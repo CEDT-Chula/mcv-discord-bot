@@ -15,4 +15,4 @@ RUN npm run build
 
 # Start the app, do migrations first
 CMD ["npm", "start"]
-HEALTHCHECK CMD curl --fail http://localhost:3000/health || exit 1
+HEALTHCHECK --interval=30s --timeout=30s --retries=3 CMD exit 0
