@@ -20,7 +20,7 @@
   "scripts": {
     "migrate": "prisma db push",
     "build": "prisma generate && tsc",
-    "start": "node ./build/index.js",
+    "start": "prisma db push && node ./build/index.js",
     "dev": "prisma generate && prisma db push && nodemon ./src/index.ts"
   },
   "name": "mcv-discord-bot",
