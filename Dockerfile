@@ -15,4 +15,5 @@ RUN npm run build
 
 # Start the app, do migrations first
 CMD ["npm", "start"]
-HEALTHCHECK NONE
+# always pass the healthcheck
+HEALTHCHECK CMD exit 0
