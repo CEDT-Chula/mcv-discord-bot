@@ -18,6 +18,7 @@
     "typescript": "^5.4.2"
   },
   "scripts": {
+    "migrate": "prisma db push",
     "build": "prisma generate && tsc",
     "start": "node ./build/index.js",
     "dev": "prisma generate && prisma db push && nodemon ./src/index.ts"

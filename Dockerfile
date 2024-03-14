@@ -13,5 +13,5 @@ RUN npm ci
 
 RUN npm run build
 
-# Start the app
+# Start the app, do migrations first
 CMD ["npm", "start"]
