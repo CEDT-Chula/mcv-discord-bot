@@ -74,3 +74,13 @@ client.on("ready",async ()=>{
 })
 
 client.login(env.DISCORD_TOKEN)
+
+// run http server for health checking purpose
+import express from "express"
+const app = express();
+app.get("/health",(req,res)=>{
+    res.send("server is up")
+})
+app.listen(3000,()=>{
+    console.log("server is up on port 3000")
+})
