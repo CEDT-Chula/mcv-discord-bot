@@ -4,6 +4,7 @@ import * as db from "../database/database"
 import {targetYear, targetSemester} from "../config/config"
 import {adminDM, assignmentsStack, client} from "../index"
 import { TextChannel } from "discord.js"
+import { env } from "./env"
 dotenv.config({
     path:"./.env"
 })
@@ -15,7 +16,7 @@ export async function updateCourses(){
     let response = await fetch(`https://www.mycourseville.com/`,{
         method: "get",
         headers:{
-            Cookie:process.env.COOKIE
+            Cookie: env.COOKIE
         }
     }).then(res=>res.text());
     const $ = cheerio.load(response);

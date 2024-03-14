@@ -1,0 +1,14 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    container_name: postgres-mcv-noti
+    ports:
+      - '6710:5432'
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - postgres-db-noti:/var/lib/postgresql/data
+volumes:
+  postgres-db-noti:

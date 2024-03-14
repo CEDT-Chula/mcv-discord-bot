@@ -6,6 +6,7 @@ import * as db from "./database/database"
 import { getCommands, toDiscordCommandBody } from "./discord/getCommands"
 import { registerCommands } from "./discord/registerCommands"
 import * as dotenv from "dotenv"
+import { env } from "./utils/env"
 dotenv.config({
     path:"./.env"
 })
@@ -28,7 +29,7 @@ interface CommandHandler{
     }
 }
 
-client.on("interactionCreate",async (interaction)=>{
+client.on("interactionCreate",async (interaction: Interaction)=>{
     if(!interaction.isChatInputCommand()||interaction.guildId==null){
         return;
     }
@@ -40,7 +41,7 @@ client.on("interactionCreate",async (interaction)=>{
                 guildID:interaction.guildId,
                 channelID:interaction.channelId
             }
-            await command.callback(interaction,calledChannel);
+            await command.callback(interaction, calledChannel);
         }
         else{
             await interaction.reply("command not found")
@@ -65,11 +66,11 @@ start();
 
 client.on("ready",async ()=>{
     console.log("logged in "+(new Date()).toString());
-    adminDM = await client.users.createDM(process.env.ADMIN_USER_ID!);
+    adminDM = await client.users.createDM(env.ADMIN_USER_ID);
     adminDM.send("server is up!");
 
     await updateHandler();
     setInterval(updateHandler,intervalTime*60*1000);
 })
 
-client.login(process.env.DISCORD_TOKEN)
+client.login(env.DISCORD_TOKEN)
