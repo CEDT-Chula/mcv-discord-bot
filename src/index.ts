@@ -1,15 +1,10 @@
 import {update, updateAssignments, updateCourses, updateHandler} from "./utils/utils"
 import {Client,GatewayIntentBits} from "discord.js"
 import type {DMChannel, Interaction, CacheType, ChatInputCommandInteraction, TextChannel} from "discord.js"
-import {intervalTime} from "./config/config"
 import * as db from "./database/database"
 import { getCommands, toDiscordCommandBody } from "./discord/getCommands"
 import { registerCommands } from "./discord/registerCommands"
-import * as dotenv from "dotenv"
 import { env } from "./utils/env"
-dotenv.config({
-    path:"./.env"
-})
 
 export let assignmentsStack: Array<db.Assignment>=[];
 
@@ -22,7 +17,7 @@ export const client = new Client({
 export let adminDM : DMChannel;
 let commands: CommandHandler;
 
-interface CommandHandler{
+export interface CommandHandler{
     [name: string]: {
         description: string,
         callback: (interaction: ChatInputCommandInteraction<CacheType>,calledChannel: db.Channel) => Promise<any>
@@ -70,7 +65,7 @@ client.on("ready",async ()=>{
     adminDM.send("server is up!");
 
     await updateHandler();
-    setInterval(updateHandler,intervalTime*60*1000);
+    setInterval(updateHandler,env.DELAY*1000);
 })
 
 client.login(env.DISCORD_TOKEN)

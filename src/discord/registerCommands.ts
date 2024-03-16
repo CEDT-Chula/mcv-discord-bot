@@ -1,18 +1,18 @@
 import { REST, Routes } from 'discord.js';
 import {toDiscordCommandBody} from "./getCommands"
-import * as dotenv from "dotenv"
 import { env } from '../utils/env';
-dotenv.config({
-    path:"./.env"
-})
+import { CommandHandler } from '..';
 const rest = new REST().setToken(
     env.DISCORD_TOKEN
 );
-export function registerCommands(commands:any){
+export function registerCommands(commands:CommandHandler){
+    if(Object.keys(commands).length==0){
+        throw new Error("No Commands Found")
+    }
     let discordCommandBody = toDiscordCommandBody(commands);
-    console.log(commands)
-    rest.put(Routes.applicationCommands(
-        env.CLIENT_ID
-    ),{body:discordCommandBody})
+    const route = Routes.applicationCommands(env.CLIENT_ID)
+    const requestData = {
+        body:discordCommandBody
+    }
+    rest.put(route,requestData)
 }
-
