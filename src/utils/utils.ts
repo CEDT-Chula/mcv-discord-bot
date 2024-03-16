@@ -119,7 +119,7 @@ export async function update(){
 *  */
 export async function updateHandler(){
     if(env.INTERVAL_LOGGING){
-        console.log("new interval starts "+(new Date()).toString())
+        console.log("new interval started at "+formatDateToBangkok(new Date()))
     }
     let message = await update();
     if(message==""){
@@ -131,4 +131,8 @@ export async function updateHandler(){
             // adminDM.send(message);
             await discordChannel.send(message);
     }
+}
+
+export function formatDateToBangkok(date: Date){
+    return date.toLocaleString('en-US',{timeZone:'Asia/Bangkok'})+" GMT+0700('Asia/Bangkok')"
 }

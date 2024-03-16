@@ -1,4 +1,4 @@
-import {update, updateAssignments, updateCourses, updateHandler} from "./utils/utils"
+import {formatDateToBangkok, update, updateAssignments, updateCourses, updateHandler} from "./utils/utils"
 import {Client,GatewayIntentBits} from "discord.js"
 import type {DMChannel, Interaction, CacheType, ChatInputCommandInteraction, TextChannel} from "discord.js"
 import * as db from "./database/database"
@@ -60,7 +60,7 @@ async function start(){
 start();
 
 client.on("ready",async ()=>{
-    console.log("logged in "+(new Date()).toString());
+    console.log("Server started at "+formatDateToBangkok(new Date()));
     adminDM = await client.users.createDM(env.ADMIN_USER_ID);
     adminDM.send("server is up!");
 
