@@ -1,21 +1,32 @@
 import { PrismaClient, Course, Assignment, NotificationChannel } from '@prisma/client'
+import {assignmentsCache,coursesCache} from './cache';
 
 const prisma = new PrismaClient()
 export async function courseExists(course: Course): Promise<boolean> {
+    if(coursesCache.get(course.mcvID)!==undefined){
+        return true;
+    }
+    // console.log("accessing database.. course")
     let found = await prisma.course.findFirst({
         where: {
             mcvID: course.mcvID
         }
     });
+    coursesCache.set(course.mcvID,null);
     return found!=null;
 }
 
 export async function assignmentExists(assignment: Assignment): Promise<boolean>{
+    if(assignmentsCache.get(assignment.mcvCourseID+assignment.assignmentName)!==undefined){
+        return true;
+    }
+    // console.log("accessing database.. assignment")
     let found = await prisma.assignment.findFirst({
         where: {
             assignmentName: assignment.assignmentName
         }
     });
+    assignmentsCache.set(assignment.mcvCourseID+assignment.assignmentName,null);
     return found!=null;
 }
 
@@ -37,6 +48,10 @@ export async function getAllCourses(): Promise<Course[]>{
 }
 
 export async function getCourse(mcvID: number){
+    let cacheFound = coursesCache.get(mcvID)
+    if(cacheFound!==undefined){
+        return cacheFound;
+    }
     return await prisma.course.findFirst({
         where:{
             mcvID:mcvID
@@ -53,15 +68,21 @@ export async function getChannelOfGuild(guildID: string): Promise<NotificationCh
 }
 
 export async function saveCourse(obj:Course){
-    await prisma.course.create({
+    const course = await prisma.course.create({
         data:obj
     })
+    if(course!=undefined){
+        coursesCache.set(obj.mcvID,null);
+    }
 }
 
 export async function saveAssignment(obj:Assignment){
-    await prisma.assignment.create({
+    const assignment = await prisma.assignment.create({
         data:obj
     })
+    if(assignment!=undefined){
+        assignmentsCache.set(assignment.mcvCourseID+assignment.assignmentName,null);
+    }
 }
 
 export async function saveChannel(obj:NotificationChannel){

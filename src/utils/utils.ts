@@ -4,6 +4,7 @@ import {targetYear, targetSemester} from "../config/config"
 import {adminDM, assignmentsStack, client} from "../index"
 import { TextChannel } from "discord.js"
 import { env } from "./env"
+import { assignmentsCache, coursesCache } from "../database/cache"
 
 export async function updateCourses(){
     let response = await fetch(`https://www.mycourseville.com/`,{
@@ -85,7 +86,8 @@ export async function updateAssignments(mcvID:number){
  * @returns message containing new added assignments
  */
 export async function update(){
-    // updateCourses();
+    updateCourses();
+    // console.log(assignmentsCache.keys(),coursesCache.keys())
     let coursesList = await db.getAllCourses();
     for await (const courses of coursesList){
         await updateAssignments(courses.mcvID);
