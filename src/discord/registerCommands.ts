@@ -10,6 +10,7 @@ const rest = new REST().setToken(
 );
 export function registerCommands(commands:any){
     let discordCommandBody = toDiscordCommandBody(commands);
+    console.log(commands)
     rest.put(Routes.applicationCommands(
         env.CLIENT_ID
     ),{body:discordCommandBody})

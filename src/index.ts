@@ -59,18 +59,18 @@ client.on("interactionCreate",async (interaction: Interaction)=>{
  */
 async function start(){
     commands=await getCommands()
-    await registerCommands(commands);
+    registerCommands(commands);
 }
 
 start();
 
 client.on("ready",async ()=>{
-    console.log("logged in "+(new Date()).toString());
-    adminDM = await client.users.createDM(env.ADMIN_USER_ID);
-    adminDM.send("server is up!");
+    // console.log("logged in "+(new Date()).toString());
+    // adminDM = await client.users.createDM(env.ADMIN_USER_ID);
+    // adminDM.send("server is up!");
 
-    await updateHandler();
-    setInterval(updateHandler,intervalTime*60*1000);
+    // await updateHandler();
+    // setInterval(updateHandler,intervalTime*60*1000);
 })
 
 client.login(env.DISCORD_TOKEN)
