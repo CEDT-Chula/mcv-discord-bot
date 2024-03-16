@@ -3,7 +3,7 @@ import path from 'path';
 
 export async function getCommands(){
     let commands:any={};
-    const commandFiles = fs.readdirSync(path.join(__dirname,'../commands')).filter(file => file.endsWith('.ts'));
+    const commandFiles = fs.readdirSync(path.join(__dirname,'../commands'));
     for(let file of commandFiles){
         const {default:command} = await import(`../commands/${file}`)
         commands[command.name]=command;
