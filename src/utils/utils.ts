@@ -146,7 +146,7 @@ export async function updateHandler(){
     }
     let channels = await db.getAllChannels();
     for await (let channel of channels){
-            let discordChannel = client.channels.cache.get(channel.channelID) as TextChannel;
+            let discordChannel = await client.channels.fetch.get(channel.channelID) as TextChannel;
             // adminDM.send(message);
             await discordChannel.send(message);
     }
