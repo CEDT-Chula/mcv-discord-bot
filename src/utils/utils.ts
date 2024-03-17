@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio"
 import * as db from "../database/database"
 import {targetYear, targetSemester} from "../config/config"
-import {adminDM, assignmentsStack, client} from "../index"
+import {adminDM, assignmentsStack, client, hasEncounteredError, setHasEncounteredError} from "../index"
 import { TextChannel } from "discord.js"
 import { env } from "./env"
 import { assignmentsCache, coursesCache } from "../database/cache"
@@ -12,25 +12,38 @@ export async function updateCourses(){
         headers:{
             Cookie: env.COOKIE
         }
-    }).then(res=>res.text());
-    const $ = cheerio.load(response);
+    });
+    const responseText = await response.text();
+    // if error is first time -> notify
+    if(response.status!=200){
+        if(hasEncounteredError){
+            return;
+        }
+        console.log(await response.text())
+        setHasEncounteredError(true);
+        return await adminDM.send("Error fetching, Might be rate limited or server is down")
+    }
+    setHasEncounteredError(false);
+
+    const $ = cheerio.load(responseText);
     if(await IsInvalidResponse($)){
         return;
     }
-    let courses = $(`#courseville-courseicongroup-icon-lineup-${targetYear}-${targetSemester}-join a`).toArray();
-    for(let i=0;i<courses.length;i++){
-        let ele = courses[i];
+    let courseElements: cheerio.Element[] = $(`#courseville-courseicongroup-icon-lineup-${targetYear}-${targetSemester}-join a`).toArray();
+    // console.log(courses.length)
+    for(let courseElement of courseElements){
+        courseElement=courseElement as cheerio.TagElement;
+        // let ele = courses[i];
         let course:db.Course={
-            year: parseInt($(ele).attr("year")!),
-            semester: parseInt($(ele).attr("semester")!),
-            courseID: $(ele).attr("course_no")!,
-            mcvID: parseInt($(ele).attr("cv_cid")!),
-            title: $(ele).attr("title")!,
+            year: parseInt(courseElement.attribs.year!),
+            semester: parseInt(courseElement.attribs.semester!),
+            courseID: courseElement.attribs.course_no!,
+            mcvID: parseInt(courseElement.attribs.cv_cid!),
+            title: courseElement.attribs.title!,
         }
+        console.log(course)
         let found = await db.courseExists(course);
-        // console.log(found)
         if(!found){
-            // console.log("not found")
             db.saveCourse(course);
         }
     }
@@ -54,14 +67,20 @@ export async function updateAssignments(mcvID:number){
         headers:{
             Cookie: env.COOKIE!
         }
-    }).then(res=>{
-        if(res.status!=200){
-            throwErrorToAdmin("Error fetching, Might be rate limited or server is down")
-        }
-        return res.text()
     })
+    const responseText = await response.text()
+    // if error is first time -> notify
+    if(response.status!=200){
+        if(hasEncounteredError){
+            return;
+        }
+        console.log(await response.text())
+        setHasEncounteredError(true);
+        return await adminDM.send("Error fetching, Might be rate limited or server is down")
+    }
+    setHasEncounteredError(false);
     
-    const $ = cheerio.load(response);
+    const $ = cheerio.load(responseText);
     if(await IsInvalidResponse($)){
         return;
     }

@@ -5,8 +5,13 @@ import * as db from "./database/database"
 import { getCommands, toDiscordCommandBody } from "./discord/getCommands"
 import { registerCommands } from "./discord/registerCommands"
 import { env } from "./utils/env"
-
 export let assignmentsStack: Array<db.Assignment>=[];
+
+export let hasEncounteredError: boolean = false;
+
+export function setHasEncounteredError(newValue: boolean){
+    hasEncounteredError=newValue
+}
 
 export const client = new Client({
     intents: [
