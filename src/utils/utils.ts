@@ -43,7 +43,6 @@ export async function updateCourses(){
             mcvID: parseInt(courseElement.attribs.cv_cid!),
             title: courseElement.attribs.title!,
         }
-        console.log(course)
         let found = await db.courseExists(course);
         if(!found){
             db.saveCourse(course);
@@ -147,7 +146,6 @@ export async function updateHandler(){
         return;
     }
     let channels = await db.getAllChannels();
-    console.log(channels)
     for await (let channel of channels){
             let discordChannel = await client.channels.fetch(channel.channelID) as TextChannel;
             // adminDM.send(message);
