@@ -24,7 +24,7 @@ export async function updateCourses(){
         return await adminDM.send("Error fetching, Might be rate limited or server is down")
     }
     setHasEncounteredError(false);
-
+    await adminDM.send("server back to normal")
     const $ = cheerio.load(responseText);
     if(await IsInvalidResponse($)){
         return;
