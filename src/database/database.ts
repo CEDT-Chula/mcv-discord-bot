@@ -3,7 +3,7 @@ import {assignmentsCache,coursesCache} from './cache';
 
 const prisma = new PrismaClient()
 export async function courseExists(course: Course): Promise<boolean> {
-    if(coursesCache.get(course.mcvID)!==undefined){
+    if(coursesCache.get(course.mcvID.toString())!==undefined){
         return true;
     }
     // console.log("accessing database.. course")
@@ -12,7 +12,9 @@ export async function courseExists(course: Course): Promise<boolean> {
             mcvID: course.mcvID
         }
     });
-    coursesCache.set(course.mcvID,null);
+    if(found){
+        coursesCache.set(course.mcvID.toString(),course);
+    }
     return found!=null;
 }
 
@@ -26,7 +28,9 @@ export async function assignmentExists(assignment: Assignment): Promise<boolean>
             assignmentName: assignment.assignmentName
         }
     });
-    assignmentsCache.set(assignment.mcvCourseID+assignment.assignmentName,null);
+    if(found){
+        assignmentsCache.set(assignment.mcvCourseID+assignment.assignmentName,found);
+    }
     return found!=null;
 }
 
@@ -47,8 +51,8 @@ export async function getAllCourses(): Promise<Course[]>{
     return await prisma.course.findMany();
 }
 
-export async function getCourse(mcvID: number){
-    let cacheFound = coursesCache.get(mcvID)
+export async function getCourse(mcvID: number): Promise<Course|null>{
+    let cacheFound = coursesCache.get(mcvID.toString())
     if(cacheFound!==undefined){
         return cacheFound;
     }
@@ -72,7 +76,7 @@ export async function saveCourse(obj:Course){
         data:obj
     })
     if(course!=undefined){
-        coursesCache.set(obj.mcvID,null);
+        coursesCache.set(obj.mcvID.toString(),course);
     }
 }
 
@@ -81,7 +85,7 @@ export async function saveAssignment(obj:Assignment){
         data:obj
     })
     if(assignment!=undefined){
-        assignmentsCache.set(assignment.mcvCourseID+assignment.assignmentName,null);
+        assignmentsCache.set(assignment.mcvCourseID+assignment.assignmentName,assignment);
     }
 }
 
