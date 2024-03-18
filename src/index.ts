@@ -62,7 +62,7 @@ async function start(){
     registerCommands(commands);
     
     let channels = await db.getAllChannels();
-    console.log(channels)
+    console.log(commands)
 }
 
 start();
