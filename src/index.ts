@@ -31,6 +31,7 @@ export interface CommandHandler{
 
 client.on("interactionCreate",async (interaction: Interaction)=>{
     if(!interaction.isChatInputCommand()||interaction.guildId==null){
+        console.log("gg")
         return;
     }
     try{
