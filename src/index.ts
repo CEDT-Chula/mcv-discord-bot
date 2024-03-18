@@ -34,7 +34,7 @@ client.on("interactionCreate",async (interaction: Interaction)=>{
         return;
     }
     try{
-        
+        console.log("command triggered",interaction.commandName)
         let command=commands[interaction.commandName as keyof CommandHandler];
         if(command!=undefined){
             await interaction.reply({
