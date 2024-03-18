@@ -54,7 +54,7 @@ client.on("interactionCreate",async (interaction: Interaction)=>{
     catch(e){
         console.error("error occured",e);
         adminDM.send((e as any).stack)
-        await interaction.reply("Error occured!");
+        await interaction.editReply("Error occured!");
     }
 })
 
