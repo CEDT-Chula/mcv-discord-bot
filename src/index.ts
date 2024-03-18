@@ -31,13 +31,16 @@ export interface CommandHandler{
 
 client.on("interactionCreate",async (interaction: Interaction)=>{
     if(!interaction.isChatInputCommand()||interaction.guildId==null){
-        console.log("gg")
         return;
     }
     try{
+        
         let command=commands[interaction.commandName as keyof CommandHandler];
         if(command!=undefined){
-            await interaction.reply("working on it...")
+            await interaction.reply({
+                content:"working on it...",
+                ephemeral: true 
+            })
             let calledChannel:db.Channel = {
                 guildID:interaction.guildId,
                 channelID:interaction.channelId
@@ -51,7 +54,7 @@ client.on("interactionCreate",async (interaction: Interaction)=>{
     catch(e){
         console.error("error occured",e);
         adminDM.send((e as any).stack)
-        await interaction.editReply("Error occured!");
+        await interaction.reply("Error occured!");
     }
 })
 
