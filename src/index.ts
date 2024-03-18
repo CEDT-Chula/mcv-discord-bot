@@ -59,7 +59,7 @@ client.on("interactionCreate",async (interaction: Interaction)=>{
  */
 async function start(){
     commands=await getCommands()
-    registerCommands(commands);
+    await registerCommands(commands);
     
     let channels = await db.getAllChannels();
     console.log(commands)

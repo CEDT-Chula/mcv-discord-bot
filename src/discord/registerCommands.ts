@@ -5,7 +5,7 @@ import { CommandHandler } from '..';
 const rest = new REST().setToken(
     env.DISCORD_TOKEN
 );
-export function registerCommands(commands:CommandHandler){
+export async function registerCommands(commands:CommandHandler){
     if(Object.keys(commands).length==0){
         throw new Error("No Commands Found")
     }
@@ -14,5 +14,5 @@ export function registerCommands(commands:CommandHandler){
     const requestData = {
         body:discordCommandBody
     }
-    rest.put(route,requestData)
+    await rest.put(route,requestData)
 }
