@@ -12,7 +12,17 @@ export async function updateCourses(){
         headers:{
             Cookie: env.COOKIE
         }
-    });
+    }).catch(async (e)=>{
+        if(hasEncounteredError){
+            return;
+        }
+        console.log(responseText)
+        setHasEncounteredError(true);
+        await adminDM.send("Error fetching, Might be rate limited or server is down")
+    })
+    if(response==undefined){
+        return;
+    }
     const responseText = await response.text();
     // if error is first time -> notify
     if(response.status!=200){
@@ -68,7 +78,17 @@ export async function updateAssignments(mcvID:number){
         headers:{
             Cookie: env.COOKIE!
         }
+    }).catch(async (e)=>{
+        if(hasEncounteredError){
+            return;
+        }
+        console.log(responseText)
+        setHasEncounteredError(true);
+        await adminDM.send("Error fetching, Might be rate limited or server is down")
     })
+    if(response==undefined){
+        return;
+    }
     const responseText = await response.text()
     // if error is first time -> notify
     if(response.status!=200){
