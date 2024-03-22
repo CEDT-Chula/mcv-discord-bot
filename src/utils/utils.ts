@@ -75,7 +75,7 @@ export async function updateAssignments(mcvID:number){
         if(hasEncounteredError){
             return;
         }
-        console.log(await response.text())
+        console.log(responseText)
         setHasEncounteredError(true);
         return await adminDM.send("Error fetching, Might be rate limited or server is down")
     }
