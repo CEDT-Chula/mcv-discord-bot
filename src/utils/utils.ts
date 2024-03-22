@@ -16,7 +16,6 @@ export async function updateCourses(){
         if(hasEncounteredError){
             return;
         }
-        console.log(responseText)
         setHasEncounteredError(true);
         await adminDM.send("Error fetching, Might be rate limited or server is down")
     })
@@ -82,7 +81,6 @@ export async function updateAssignments(mcvID:number){
         if(hasEncounteredError){
             return;
         }
-        console.log(responseText)
         setHasEncounteredError(true);
         await adminDM.send("Error fetching, Might be rate limited or server is down")
     })
