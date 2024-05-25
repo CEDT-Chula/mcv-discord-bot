@@ -1,4 +1,4 @@
-import {formatDateToBangkok, update, updateAssignments, updateCourses, updateHandler} from "./utils/utils"
+import {formatDateToBangkok, update, updateAssignments, updateHandler} from "./utils/utils"
 import {Client,GatewayIntentBits} from "discord.js"
 import type {DMChannel, Interaction, CacheType, ChatInputCommandInteraction, TextChannel} from "discord.js"
 import * as db from "./database/database"
@@ -20,6 +20,7 @@ export const client = new Client({
     ]
 })
 export let adminDM : DMChannel;
+let intervalId: NodeJS.Timeout;
 let commands: CommandHandler;
 
 export interface CommandHandler{
@@ -69,6 +70,10 @@ async function start(){
     console.log(commands)
 }
 
+export function getIntervalId(){
+  return intervalId;
+}
+
 start();
 
 client.on("ready",async ()=>{
@@ -76,8 +81,9 @@ client.on("ready",async ()=>{
     adminDM = await client.users.createDM(env.ADMIN_USER_ID);
     adminDM.send("server is up!");
 
-    await updateHandler();
-    setInterval(updateHandler,env.DELAY*1000);
+    if(await updateHandler()){
+      intervalId = setInterval(updateHandler,env.DELAY*1000);
+    }
 })
 
 client.login(env.DISCORD_TOKEN)

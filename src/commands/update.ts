@@ -8,7 +8,7 @@ export default {
     description: "Update assignments list to notification channel",
     callback: async (interaction: ChatInputCommandInteraction<CacheType>, calledChannel:db.Channel)=>{
         let result = await update();
-        if(result!=""){
+        if(result!=""&&result!=undefined){
             let notificationChannel = await db.getChannelOfGuild(interaction.guildId!);
             if(notificationChannel==null){
                 await interaction.editReply("There is no notification channel in this server.");

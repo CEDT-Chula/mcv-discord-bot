@@ -11,7 +11,8 @@ const envSchema = z.object({
     ADMIN_USER_ID: z.string(),
     COOKIE: z.string(),
     DELAY: z.string().regex(/^\d+$/).transform(Number),
-    INTERVAL_LOGGING: z.enum(["true", "false"]).transform((v) => v === "true")
+    INTERVAL_LOGGING: z.enum(["true", "false"]).transform((v) => v === "true"),
+    ERROR_FETCHING_NOTIFICATION: z.enum(["true", "false"]).transform((v) => v === "true")
 });
 
 
@@ -22,7 +23,8 @@ const envParser = envSchema.safeParse({
     ADMIN_USER_ID: process.env.ADMIN_USER_ID,
     COOKIE: process.env.COOKIE,
     DELAY: process.env.DELAY,
-    INTERVAL_LOGGING: process.env.INTERVAL_LOGGING
+    INTERVAL_LOGGING: process.env.INTERVAL_LOGGING,
+    ERROR_FETCHING_NOTIFICATION: process.env.ERROR_FETCHING_NOTIFICATION
 });
 
 
