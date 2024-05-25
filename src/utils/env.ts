@@ -32,3 +32,4 @@ if (!envParser.success) {
 }
 
 export const env = envParser.data;
+console.log("test log",env)
