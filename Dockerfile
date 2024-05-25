@@ -15,4 +15,4 @@ RUN npm run build
 
 # Start the app, do migrations first
 CMD ["npm", "start"]
-HEALTHCHECK --interval=30s --timeout=30s --retries=3 CMD exit 0
+HEALTHCHECK --interval=30s --timeout=30s --retries=15 CMD exit 0
