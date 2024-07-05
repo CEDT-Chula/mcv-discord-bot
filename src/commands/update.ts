@@ -1,13 +1,13 @@
 import { ChatInputCommandInteraction, CacheType, Channel, TextChannel } from "discord.js";
-import { update } from "../utils/utils";
+import { updateAll } from "../scraper/updateAll";
 import { client } from "../server";
-import * as db from "../database/database"
+import db from "../database/database"
 
 export default {
     name:"update",
     description: "Update assignments list to notification channel",
-    callback: async (interaction: ChatInputCommandInteraction<CacheType>, calledChannel:db.Channel)=>{
-        let result = await update();
+    callback: async (interaction: ChatInputCommandInteraction<CacheType>, calledChannel:Channel)=>{
+        let result = await updateAll();
         if(result!=""&&result!=undefined){
             let notificationChannel = await db.getChannelOfGuild(interaction.guildId!);
             if(notificationChannel==null){

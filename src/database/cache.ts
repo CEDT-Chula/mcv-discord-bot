@@ -1,6 +1,6 @@
 
 import NodeCache from "node-cache";
-import { Assignment, Course } from "./database";
+import db, { Assignment, Course } from "./database";
 const cacheOption = {
     stdTTL: 10000, //seconds
     deleteOnExpire: true

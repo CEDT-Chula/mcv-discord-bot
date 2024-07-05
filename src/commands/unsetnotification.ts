@@ -1,9 +1,9 @@
-import { ChatInputCommandInteraction, CacheType, Channel } from "discord.js";
-import * as db from "../database/database"
+import { ChatInputCommandInteraction, CacheType } from "discord.js";
+import db, { Channel } from "../database/database"
 export default {
     name: "unsetnotification",
     description: "Unset this channel for MyCourseVille notification",
-    callback: async (interaction: ChatInputCommandInteraction<CacheType>,calledChannel:db.Channel)=>{
+    callback: async (interaction: ChatInputCommandInteraction<CacheType>,calledChannel:Channel)=>{
         try{
             await db.unsetChannelOfGuild(calledChannel.guildID);
             await interaction.editReply("Successfully stop notification in this channel")

@@ -6,6 +6,7 @@
     "dotenv": "^16.3.1",
     "envalid": "^8.0.0",
     "express": "^4.18.2",
+    "fp-ts": "^2.16.7",
     "node-cache": "^5.1.2",
     "zod": "^3.22.4"
   },
@@ -21,8 +22,8 @@
   "scripts": {
     "migrate": "prisma db push",
     "build": "prisma generate && tsc",
-    "start": "prisma db push && node ./build/index.js",
-    "dev": "prisma generate && prisma db push && nodemon ./src/index.ts"
+    "start": "prisma db push && node ./build/server.js",
+    "dev": "prisma generate && prisma db push && nodemon ./src/server.ts"
   },
   "name": "mcv-discord-bot",
   "description": "Discord bot to notify my course ville assignments\r # how it works:\r - fetch courses to find added course\r - fetch assignments of each course, see if it is a new assignment -> put it in stack\r - pop each new assignments to create a message sent to notification channels",

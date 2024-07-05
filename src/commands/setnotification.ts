@@ -1,10 +1,10 @@
-import { ChatInputCommandInteraction, CacheType, Channel } from "discord.js";
-import * as db from "../database/database"
+import { ChatInputCommandInteraction, CacheType } from "discord.js";
+import db, { Channel } from "../database/database"
 
 export default {
     name: "setnotification",
     description: "Set this channel for MyCourseVille notification",
-    callback: async (interaction: ChatInputCommandInteraction<CacheType>,calledChannel:db.Channel)=>{
+    callback: async (interaction: ChatInputCommandInteraction<CacheType>,calledChannel:Channel)=>{
         let found = await db.channelOfGuildExists(calledChannel);
         if(found){
             await interaction.editReply(
