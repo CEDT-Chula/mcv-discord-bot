@@ -1,7 +1,7 @@
 import { REST, Routes } from 'discord.js';
 import {toDiscordCommandBody} from "./getCommands"
 import { env } from '../utils/env';
-import { CommandHandler } from '..';
+import { CommandHandler } from '../server';
 const rest = new REST().setToken(
     env.DISCORD_TOKEN
 );

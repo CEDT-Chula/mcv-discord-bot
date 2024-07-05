@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import path from 'path';
-import { CommandHandler } from '..';
+import { CommandHandler } from '../server';
 
 export async function getCommands(){
     let commands:CommandHandler={};

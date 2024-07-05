@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, CacheType, Channel, TextChannel } from "discord.js";
 import { update } from "../utils/utils";
-import { client } from "../index";
+import { client } from "../server";
 import * as db from "../database/database"
 
 export default {

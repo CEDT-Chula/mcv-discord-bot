@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio"
 import * as db from "../database/database"
 import { targetYear, targetSemester } from "../config/config"
-import { adminDM, assignmentsStack, client, getIntervalId, hasEncounteredError, setHasEncounteredError } from "../index"
+import { adminDM, assignmentsStack, client, getIntervalId, hasEncounteredError, setHasEncounteredError } from "../server"
 import { TextChannel } from "discord.js"
 import { env } from "./env"
 import { assignmentsCache, coursesCache } from "../database/cache"
