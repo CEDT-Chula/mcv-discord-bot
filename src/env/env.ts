@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import { cleanEnv, str, email, json, bool, num } from "envalid";
 dotenv.config({
-  path: __dirname + "/.env",
+  path: "./.env",
 });
 
 export const env = cleanEnv(process.env, {
