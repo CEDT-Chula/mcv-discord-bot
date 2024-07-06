@@ -1,6 +1,6 @@
 import { TextChannel } from "discord.js";
 import db from "../database/database";
-import { env } from "../env/env";
+import env from "../env/env";
 import { updateAll } from "../scraper/updateAll";
 import { client } from "../server";
 import formatDateToBangkok from "./formatDateToBangkok";
@@ -17,10 +17,11 @@ export default async function updateHandler() {
     message = await updateAll();
   }
   catch (e) {
+    console.log(e)
     return false
   }
-  if (message == "" || message == undefined) {
-    return;
+  if (message === "") {
+    return true;
   }
   let channels = await db.getAllChannels();
   for await (let channel of channels) {

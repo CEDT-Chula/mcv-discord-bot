@@ -8,7 +8,7 @@ import * as option from "fp-ts/Option";
  * @returns message containing new added assignments
  * @throws {Error}
  */
-export async function updateAll() {
+export async function updateAll(): Promise<string> {
   await updateCourses();
   // console.log(assignmentsCache.keys(), coursesCache.keys())
   let coursesList = await db.getAllCourses();

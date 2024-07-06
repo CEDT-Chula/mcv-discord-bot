@@ -8,15 +8,12 @@ import type {
 import db, { Channel } from "./database/database";
 import { getCommands } from "./discord/getCommands";
 import { registerCommands } from "./discord/registerCommands";
-import { env } from "./env/env";
+import env from "./env/env";
 import formatDateToBangkok from "./utils/formatDateToBangkok";
 import updateHandler from "./utils/updateHandler";
+import MutableWrapper from "./utils/MutableWrapper";
 
-export let hasEncounteredError: boolean = false;
-
-export function setHasEncounteredError(newValue: boolean) {
-  hasEncounteredError = newValue;
-}
+export let hasEncounteredError: MutableWrapper<boolean> = new MutableWrapper(false);
 
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
@@ -63,23 +60,6 @@ client.on("interactionCreate", async (interaction: Interaction) => {
   }
 });
 
-/**
- * @description do something before connect to discord
- */
-async function start() {
-  commands = await getCommands();
-  await registerCommands(commands);
-
-  // let channels = await db.getAllChannels();
-  console.log(commands);
-}
-
-export function getIntervalId() {
-  return intervalId;
-}
-
-start();
-
 client.on("ready", async () => {
   console.log("Server started at " + formatDateToBangkok(new Date()));
   adminDM = await client.users.createDM(env.ADMIN_USER_ID);
@@ -90,4 +70,18 @@ client.on("ready", async () => {
   }
 });
 
-client.login(env.DISCORD_TOKEN);
+/**
+ * @description do something before connecting to discord
+ */
+export async function start() {
+  commands = await getCommands();
+  await registerCommands(commands);
+
+  // let channels = await db.getAllChannels();
+  console.log(commands);
+  client.login(env.DISCORD_TOKEN);  
+}
+
+export function getIntervalId() {
+  return intervalId;
+}

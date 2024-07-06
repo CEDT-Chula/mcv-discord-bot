@@ -1,53 +1,30 @@
-import { env } from "../env/env";
+import env from "../env/env";
 import { targetYear, targetSemester } from "../config/config";
-import { hasEncounteredError, setHasEncounteredError } from "../server";
-import { errorFetchingNotify } from "../utils/errorFetchingNotify";
+import { hasEncounteredError } from "../server";
+import errorFetchingNotify from "../utils/errorFetchingNotify";
 import * as cheerio from "cheerio"
 import { isCookieInvalid } from "../utils/isCookieInvalid";
 import db, { Course } from "../database/database";
+import fetchAndCatch from "../utils/fetchAndCatch";
+import { option } from "fp-ts";
+import { determineYearAndSemester } from "./determineYearAndSemester";
+
 /** 
- * @throws {Error}
+ * @throws {InvalidCookieError}
  */
-export default async function updateCourses() {
-  let response = await fetch(`https://www.mycourseville.com/`, {
-    method: "get",
-    headers: {
-      Cookie: env.COOKIE
-    }
-  }).catch(async (e) => {
-    if (hasEncounteredError) {
-      return;
-    }
-    setHasEncounteredError(true);
-    await errorFetchingNotify("Error fetching, Might be rate limited or server is down")
-  })
-  if (response == undefined) {
+export default async function updateCourses(): Promise<void> {
+  let result = await fetchAndCatch(`https://www.mycourseville.com/`);
+  if(option.isNone(result)){
     return;
   }
-  const responseText = await response.text();
-  // if error is first time -> notify
-  if (response.status != 200) {
-    if (hasEncounteredError) {
-      return;
-    }
-    console.log(responseText)
-    setHasEncounteredError(true);
 
-    return await errorFetchingNotify("Error fetching, Might be rate limited or server is down")
+  let $ = result.value;
+  if(env.AUTO_DETERMINE_YEAR_AND_SEMESTER){
+    determineYearAndSemester($);
   }
-  if (hasEncounteredError) {
-    await errorFetchingNotify("server back to normal")
-  }
-  setHasEncounteredError(false);
-  const $ = cheerio.load(responseText);
-  if (await isCookieInvalid($)) {
-    throw new Error("InvalidCookie")
-  }
-  let courseElements: cheerio.Element[] = $(`#courseville-courseicongroup-icon-lineup-${targetYear}-${targetSemester}-join a`).toArray();
-  // console.log(courses.length)
+  let courseElements: cheerio.Element[] = $(`#courseville-courseicongroup-icon-lineup-${targetYear.get()}-${targetSemester.get()}-join a`).toArray();
   for (let courseElement of courseElements) {
     courseElement = courseElement as cheerio.TagElement;
-    // let ele = courses[i];
     let course: Course = {
       year: parseInt(courseElement.attribs.year!),
       semester: parseInt(courseElement.attribs.semester!),

@@ -1,2 +1,5 @@
-export const targetYear = 2023;
-export const targetSemester = 2;
+import { option } from "fp-ts";
+import MutableWrapper from "../utils/MutableWrapper";
+
+export const targetYear: MutableWrapper<Number|undefined> = new MutableWrapper(undefined);
+export const targetSemester: MutableWrapper<Number|undefined> = new MutableWrapper(undefined);

@@ -2,7 +2,6 @@ import { PrismaClient, Course as PrismaCourse, Assignment as PrismaAssignment, N
 import {assignmentsCache,coursesCache} from './cache';
 
 const prisma = new PrismaClient()
-export default db;
 namespace db{
   export async function courseExists(course: Course): Promise<boolean> {
     if(coursesCache.get(course.mcvID.toString())!==undefined){
@@ -109,6 +108,8 @@ namespace db{
 export type Channel = NotificationChannel;
 export type Course = PrismaCourse;
 export type Assignment = PrismaAssignment;
+
+export default db;
 
 // export async function courseExists(course: Course): Promise<boolean> {
 //     if(coursesCache.get(course.mcvID.toString())!==undefined){
