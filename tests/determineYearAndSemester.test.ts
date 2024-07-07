@@ -43,16 +43,19 @@ import fetchAndCatch from '../src/utils/fetchAndCatch'
 import { determineYearAndSemester } from '../src/scraper/determineYearAndSemester'
 import { option } from 'fp-ts'
 import { targetSemester, targetYear } from '../src/config/config'
+import {assert} from 'console'
+import responseToCheerio from '../src/utils/responseToCheerio'
 
 let $: cheerio.Root
 describe('stop notify after encountered error', () => {
   beforeAll(async () => {
-    const result = await fetchAndCatch(`https://www.mycourseville.com/`)
-    if (option.isNone(result)) {
+    const result = await fetchAndCatch(`https://www.mycourseville.com/`,"GET");
+    const optionalCheerioRoot = await responseToCheerio(result);
+    expect(option.isSome(optionalCheerioRoot));
+    if (option.isNone(optionalCheerioRoot)) {
       return
     }
-
-    $ = result.value
+    $ = optionalCheerioRoot.value
   })
 
   test('', async () => {
