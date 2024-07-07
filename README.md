@@ -10,7 +10,7 @@ basically mcv web scraper
 - postgres with prisma as ORM
 
 # our bot:
-- you can use our [bot](https://discord.com/oauth2/authorize?client_id=1196200401582686248) ran by @HRNPH 's server
+- you can use our [bot](https://discord.com/oauth2/authorize?client_id=1196200401582686248) ran by HRNPH 's server
 (old one ran by Render.com has retired)
 
 # commands:
