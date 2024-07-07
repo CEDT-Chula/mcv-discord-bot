@@ -42,10 +42,13 @@ export default async function scrapeAssignmentsOfPage(
     '<html><table><tbody>' + resultJson.data.html + '</tbody></table></html>'
   )
 
-  const assignments = await extractAssignmentsFromCheerio(mcvID, $)
+  let assignments = await extractAssignmentsFromCheerio(mcvID, $)
 
   if (resultJson.all == undefined || resultJson.all !== true) {
-    scrapeAssignmentsOfPage(mcvID, next + 5)
+    let optionalResult = await scrapeAssignmentsOfPage(mcvID, next + 5);
+    if(option.isSome(optionalResult)){
+      assignments = assignments.concat(optionalResult.value);
+    }
   }
   return option.some(assignments)
 }

@@ -3,6 +3,7 @@ import { option } from 'fp-ts'
 import fetchAndCatch from '../utils/fetchAndCatch'
 import responseToCheerio from '../utils/responseToCheerio'
 import extractAssignmentsFromCheerio from './extractAssignmentsFromCheerio'
+import scrapeAssignmentsOfPage from './scrapeAssignmentsOfPage'
 
 /**
  * @throws {InvalidCookieError}
@@ -20,7 +21,17 @@ export default async function updateAssignments(
   }
   const $ = optionalCheerioRoot.value
 
-  const assignments = await extractAssignmentsFromCheerio(mcvID, $)
+  let assignments = await extractAssignmentsFromCheerio(mcvID, $)
+  // Showing x items from totalAssignments published items.
+  let splitResult = $("#courseville-assignment-list-loadmore-msg").text().match(/.*?\d+.*?(\d+).*?/);
+  let [_,totalAssignments] = splitResult!;
+  
+  if(parseInt(totalAssignments)>5){
+    const optionalResult = await scrapeAssignmentsOfPage(mcvID,5);
+    if(option.isSome(optionalResult)){
+      assignments = assignments.concat(optionalResult.value!);
+    }
+  }
 
   return option.some(assignments)
 }
