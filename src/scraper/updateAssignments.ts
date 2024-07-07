@@ -22,16 +22,11 @@ export default async function updateAssignments(
   const $ = optionalCheerioRoot.value
 
   let assignments = await extractAssignmentsFromCheerio(mcvID, $)
-  // Showing x items from totalAssignments published items.
-  let splitResult = $("#courseville-assignment-list-loadmore-msg").text().match(/.*?\d+.*?(\d+).*?/);
-  let [_,totalAssignments] = splitResult!;
-  
-  if(parseInt(totalAssignments)>5){
-    const optionalResult = await scrapeAssignmentsOfPage(mcvID,5);
-    if(option.isSome(optionalResult)){
-      assignments = assignments.concat(optionalResult.value!);
-    }
-  }
 
+  const optionalResult = await scrapeAssignmentsOfPage(mcvID,5);
+  if(option.isSome(optionalResult)){
+    assignments = assignments.concat(optionalResult.value!);
+  }
+  
   return option.some(assignments)
 }
