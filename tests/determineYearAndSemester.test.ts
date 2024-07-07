@@ -33,6 +33,12 @@ jest.mock('../src/server', () => {
   }
 })
 
+jest.mock('../src/database/database', () => {
+  return {
+    __esModule: true,
+  }
+})
+
 const mockErrorFetchingNotify = jest.fn()
 jest.mock('../src/utils/errorFetchingNotify', () => ({
   __esModule: true,
@@ -43,7 +49,6 @@ import fetchAndCatch from '../src/utils/fetchAndCatch'
 import { determineYearAndSemester } from '../src/scraper/determineYearAndSemester'
 import { option } from 'fp-ts'
 import { targetSemester, targetYear } from '../src/config/config'
-import {assert} from 'console'
 import responseToCheerio from '../src/utils/responseToCheerio'
 
 let $: cheerio.Root
