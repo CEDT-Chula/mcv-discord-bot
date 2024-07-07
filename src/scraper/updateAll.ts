@@ -11,7 +11,7 @@ import * as option from 'fp-ts/Option'
 export async function updateAll(): Promise<string> {
   await updateCourses()
   // console.log(assignmentsCache.keys(), coursesCache.keys())
-  const coursesList = await db.getAllCourses()
+  const coursesList = await db.getAllCoursesOfTargetSemester()
   const assignments: Array<Assignment> = []
   for await (const courses of coursesList) {
     const newAssignments = await updateAssignments(courses.mcvID)

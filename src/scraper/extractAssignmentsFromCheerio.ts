@@ -15,7 +15,7 @@ export default async function extractAssignmentsFromCheerio(
     }
     const found = await db.assignmentExists(assignment)
     if (!found) {
-      console.log('found new assignment')
+      console.log('found new assignment',assignment)
       assignments.push(assignment)
       db.saveAssignment(assignment)
     }

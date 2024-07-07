@@ -28,22 +28,15 @@ export default async function scrapeAssignmentsOfPage(
   const resultJson: LoadMoreAssignmentsResponse = await response?.json()
 
   if (resultJson.status == 0) {
-    if (hasEncounteredError.get()) {
-      return option.none
-    }
-    console.log(resultJson)
-    hasEncounteredError.set(true)
-    await errorFetchingNotify(NotifyMessage.SessionLost)
-    return option.none
+    return option.none;
   }
-  hasEncounteredError.set(false)
 
   const $ = cheerio.load(
     '<html><table><tbody>' + resultJson.data.html + '</tbody></table></html>'
   )
 
   let assignments = await extractAssignmentsFromCheerio(mcvID, $)
-
+  
   if (resultJson.all == undefined || resultJson.all !== true) {
     let optionalResult = await scrapeAssignmentsOfPage(mcvID, next + 5);
     if(option.isSome(optionalResult)){
