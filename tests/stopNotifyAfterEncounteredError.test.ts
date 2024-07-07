@@ -2,6 +2,14 @@ global.fetch = jest.fn(async () => {
   throw new Error("")
 }) as jest.Mock;
 
+jest.mock("../src/env/env",()=>{
+  return {
+    COOKIE: "cookie",
+    ERROR_FETCHING_NOTIFICATION: false,
+    AUTO_DETERMINE_YEAR_AND_SEMESTER: true
+  }
+})
+
 jest.mock("../src/server", () => {
   const actualModule = jest.requireActual("../src/server");
   return {
