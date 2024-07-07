@@ -1,16 +1,17 @@
 Discord bot to notify my course ville assignments
+
+basically mcv web scraper
 # how it works:
 - fetch courses to find added course
-- fetch assignments of each course, see if it is a new assignment -> put it in stack
-- pop each new assignments to create a message sent to notification channels
+- fetch assignments of each course, see if it is a new assignment
+- use the new assignments to create a message sent to each notification channels
 
 # database:
-- my bot (myCourseVille FROOK bot) uses mongodb due to lack of money 😢
-- I have created postgresql database branch feel free to fork it and make your own bot(the branch isn't updated though)
+- postgres with prisma as ORM
 
-# my bot:
-- to invite my bot, use this [link](https://discord.com/api/oauth2/authorize?client_id=1194885205765394512&permissions=2048&scope=bot)
-- my server is ran by [Render](https://render.com/) completely free because I have no money nor life ☠
+# our bot:
+- you can use our [bot](https://discord.com/oauth2/authorize?client_id=1196200401582686248) ran by @HRNPH 's server
+(old one ran by Render.com has retired)
 
 # commands:
 - /setnotification -> set this channel as notification channel
