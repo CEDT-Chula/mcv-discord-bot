@@ -1,2 +1,1 @@
-export default class InvalidCookieError extends Error{
-}
+export default class InvalidCookieError extends Error {}

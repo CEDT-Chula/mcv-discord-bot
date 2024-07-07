@@ -1,7 +1,7 @@
 global.fetch = jest.fn(async () => {
   return {
     status: 200,
-    text: async ()=>{
+    text: async () => {
       return `
       <html>
         <h2>2023/3</h2>
@@ -9,55 +9,55 @@ global.fetch = jest.fn(async () => {
         <h2>2023/1</h2>
       </html>
       `
-    }
+    },
   }
-}) as jest.Mock;
+}) as jest.Mock
 
-jest.mock("../src/env/env",()=>{
+jest.mock('../src/env/env', () => {
   return {
-    COOKIE: "cookie",
+    COOKIE: 'cookie',
     ERROR_FETCHING_NOTIFICATION: false,
-    AUTO_DETERMINE_YEAR_AND_SEMESTER: true
+    AUTO_DETERMINE_YEAR_AND_SEMESTER: true,
   }
 })
 
-jest.mock("../src/server", () => {
-  const actualModule = jest.requireActual("../src/server");
+jest.mock('../src/server', () => {
+  const actualModule = jest.requireActual('../src/server')
   return {
     __esModule: true,
     ...actualModule,
     adminDM: {
-      send: jest.fn().mockImplementation(()=>{})
+      send: jest.fn().mockImplementation(() => {}),
     },
-    start: jest.fn().mockImplementation(()=>{})
-  };
-});
+    start: jest.fn().mockImplementation(() => {}),
+  }
+})
 
 const mockErrorFetchingNotify = jest.fn()
-jest.mock("../src/utils/errorFetchingNotify",()=>({
+jest.mock('../src/utils/errorFetchingNotify', () => ({
   __esModule: true,
-  default: mockErrorFetchingNotify
-}));
+  default: mockErrorFetchingNotify,
+}))
 
-import fetchAndCatch from "../src/utils/fetchAndCatch";
-import { determineYearAndSemester } from "../src/scraper/determineYearAndSemester";
-import { option } from "fp-ts";
-import { targetSemester, targetYear } from "../src/config/config";
+import fetchAndCatch from '../src/utils/fetchAndCatch'
+import { determineYearAndSemester } from '../src/scraper/determineYearAndSemester'
+import { option } from 'fp-ts'
+import { targetSemester, targetYear } from '../src/config/config'
 
-let $: cheerio.Root;
-describe("stop notify after encountered error",()=>{
-  beforeAll(async ()=>{
-    const result = await fetchAndCatch(`https://www.mycourseville.com/`);
-    if(option.isNone(result)){
-      return;
+let $: cheerio.Root
+describe('stop notify after encountered error', () => {
+  beforeAll(async () => {
+    const result = await fetchAndCatch(`https://www.mycourseville.com/`)
+    if (option.isNone(result)) {
+      return
     }
 
-    $ = result.value;
+    $ = result.value
   })
 
-  test("", async () => {
-    determineYearAndSemester($);
-    expect(targetYear.get()).toBe(2023);
-    expect(targetSemester.get()).toBe(3);
-  });
+  test('', async () => {
+    determineYearAndSemester($)
+    expect(targetYear.get()).toBe(2023)
+    expect(targetSemester.get()).toBe(3)
+  })
 })

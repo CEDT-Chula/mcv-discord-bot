@@ -25,6 +25,7 @@
     "globals": "^15.8.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.4",
+    "prettier": "^3.3.2",
     "prisma": "^5.16.1",
     "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
@@ -37,7 +38,15 @@
     "start": "prisma db push && node ./build/start.js",
     "dev": "prisma generate && prisma db push && nodemon ./src/start.ts",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint . --fix",
+    "pretty": "prettier --write ./**/*.ts"
+  },
+  "prettier": {
+    "endOfLine": "lf",
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5"
   },
   "name": "mcv-discord-bot",
   "description": "Discord bot to notify my course ville assignments\r # how it works:\r - fetch courses to find added course\r - fetch assignments of each course, see if it is a new assignment -> put it in stack\r - pop each new assignments to create a message sent to notification channels",

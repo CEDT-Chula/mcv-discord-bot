@@ -1,8 +1,11 @@
-import env from "../env/env";
-import { adminDM } from "../server";
+import { NotifyMessage } from '../config/config'
+import env from '../env/env'
+import { adminDM } from '../server'
 
-export default async function errorFetchingNotify() {
+export default async function errorFetchingNotify(
+  notifyMessage: NotifyMessage
+) {
   if (env.ERROR_FETCHING_NOTIFICATION) {
-    await adminDM.send("Error fetching, Might be rate limited or server is down")
+    await adminDM.send(notifyMessage)
   }
 }
