@@ -1,15 +1,15 @@
 
 import NodeCache from "node-cache";
-import db, { Assignment, Course } from "./database";
+import { Assignment, Course } from "./database";
 const cacheOption = {
     stdTTL: 10000, //seconds
     deleteOnExpire: true
 }
-const assignmentsRawCache = new NodeCache();
-const coursesRawCache = new NodeCache();
+// const assignmentsRawCache = new NodeCache();
+// const coursesRawCache = new NodeCache();
 
 class wrapperCache<T>{
-    _rawCache = new NodeCache();
+    _rawCache = new NodeCache(cacheOption);
     set(key:string, value: T){
         this._rawCache.set(key,value);
     }

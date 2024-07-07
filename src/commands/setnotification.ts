@@ -5,7 +5,7 @@ export default {
     name: "setnotification",
     description: "Set this channel for MyCourseVille notification",
     callback: async (interaction: ChatInputCommandInteraction<CacheType>,calledChannel:Channel)=>{
-        let found = await db.channelOfGuildExists(calledChannel);
+        const found = await db.channelOfGuildExists(calledChannel);
         if(found){
             await interaction.editReply(
                 `This server's notification channel has already been set!\nTo disable: /unsetnotification`

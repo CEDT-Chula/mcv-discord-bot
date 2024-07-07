@@ -2,13 +2,15 @@ import { PrismaClient, Course as PrismaCourse, Assignment as PrismaAssignment, N
 import {assignmentsCache,coursesCache} from './cache';
 
 const prisma = new PrismaClient()
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
 namespace db{
   export async function courseExists(course: Course): Promise<boolean> {
     if(coursesCache.get(course.mcvID.toString())!==undefined){
         return true;
     }
     // console.log("accessing database.. course")
-    let found = await prisma.course.findFirst({
+    const found = await prisma.course.findFirst({
         where: {
             mcvID: course.mcvID
         }
@@ -24,7 +26,7 @@ namespace db{
         return true;
     }
     // console.log("accessing database.. assignment")
-    let found = await prisma.assignment.findFirst({
+    const found = await prisma.assignment.findFirst({
         where: {
             assignmentName: assignment.assignmentName
         }
@@ -36,7 +38,7 @@ namespace db{
   }
 
    export async function channelOfGuildExists(channel: NotificationChannel): Promise<boolean>{
-    let found = await prisma.notificationChannel.findFirst({
+    const found = await prisma.notificationChannel.findFirst({
         where: {
             guildID: channel.guildID
         }
@@ -53,7 +55,7 @@ namespace db{
   }
 
    export async function getCourse(mcvID: number): Promise<Course|null>{
-    let cacheFound = coursesCache.get(mcvID.toString())
+    const cacheFound = coursesCache.get(mcvID.toString())
     if(cacheFound!==undefined){
         return cacheFound;
     }

@@ -2,12 +2,6 @@ global.fetch = jest.fn(async () => {
   throw new Error("")
 }) as jest.Mock;
 
-import db from "../src/database/database";
-const mockCourseExists = jest
-  .spyOn(db, "courseExists")
-  .mockReturnValue(Promise.resolve(false));
-const mockSaveCourse = jest.spyOn(db, "saveCourse");
-
 jest.mock("../src/server", () => {
   const actualModule = jest.requireActual("../src/server");
   return {

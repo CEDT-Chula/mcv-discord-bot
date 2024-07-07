@@ -23,9 +23,9 @@ export default async function updateHandler() {
   if (message === "") {
     return true;
   }
-  let channels = await db.getAllChannels();
-  for await (let channel of channels) {
-    let discordChannel = await client.channels.fetch(channel.channelID) as TextChannel;
+  const channels = await db.getAllChannels();
+  for await (const channel of channels) {
+    const discordChannel = await client.channels.fetch(channel.channelID) as TextChannel;
     // adminDM.send(message);
     await discordChannel.send(message);
   }

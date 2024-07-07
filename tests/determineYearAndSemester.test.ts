@@ -31,7 +31,6 @@ jest.mock("../src/utils/errorFetchingNotify",()=>({
   default: mockErrorFetchingNotify
 }));
 
-import { hasEncounteredError } from "../src/server";
 import fetchAndCatch from "../src/utils/fetchAndCatch";
 import { determineYearAndSemester } from "../src/scraper/determineYearAndSemester";
 import { option } from "fp-ts";
@@ -40,7 +39,7 @@ import { targetSemester, targetYear } from "../src/config/config";
 let $: cheerio.Root;
 describe("stop notify after encountered error",()=>{
   beforeAll(async ()=>{
-    let result = await fetchAndCatch(`https://www.mycourseville.com/`);
+    const result = await fetchAndCatch(`https://www.mycourseville.com/`);
     if(option.isNone(result)){
       return;
     }

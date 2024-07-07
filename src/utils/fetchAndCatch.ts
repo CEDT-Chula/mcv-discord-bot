@@ -10,17 +10,17 @@ import InvalidCookieError from "./InvalidCookieError";
  * @throws {InvalidCookieError}
  */
 export default async function fetchAndCatch(url: string): Promise<option.Option<cheerio.Root>>{
-  let response = await fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: {
       Cookie: env.COOKIE
     }
-  }).catch(async (e) => {
+  }).catch(async (_e) => {
     if (hasEncounteredError.get()) {
       return;
     }
     hasEncounteredError.set(true);
-    await errorFetchingNotify("Error fetching, Might be rate limited or server is down")
+    await errorFetchingNotify()
   })
   if (response == undefined) {
     return option.none;
@@ -33,7 +33,7 @@ export default async function fetchAndCatch(url: string): Promise<option.Option<
     }
     console.log(responseText)
     hasEncounteredError.set(true);
-    await errorFetchingNotify("Error fetching, Might be rate limited or server is down")
+    await errorFetchingNotify()
     return option.none;
   }
   hasEncounteredError.set(false);

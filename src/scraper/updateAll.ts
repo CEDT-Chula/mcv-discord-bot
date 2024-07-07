@@ -11,31 +11,31 @@ import * as option from "fp-ts/Option";
 export async function updateAll(): Promise<string> {
   await updateCourses();
   // console.log(assignmentsCache.keys(), coursesCache.keys())
-  let coursesList = await db.getAllCourses();
-  let assignments: Array<Assignment> = [];
+  const coursesList = await db.getAllCourses();
+  const assignments: Array<Assignment> = [];
   for await (const courses of coursesList) {
-    let newAssignments = await updateAssignments(courses.mcvID);
+    const newAssignments = await updateAssignments(courses.mcvID);
     if(option.isSome(newAssignments)){
       newAssignments.value.forEach(element => {
         assignments.push(element)
       });
     }
   }
-  let messageObject: any = {};
+  const messageObject: Record<string,Array<string>> = {};
   if (assignments.length == 0) {
     return "";
   }
-  for(let assignment of assignments){
-    let course = await db.getCourse(assignment!.mcvCourseID) as Course;
+  for(const assignment of assignments){
+    const course = await db.getCourse(assignment!.mcvCourseID) as Course;
     if (messageObject[course.title] == null) {
       messageObject[course.title] = [];
     }
     messageObject[course.title].push(assignment!.assignmentName);
   }
   let message: string = "## New Assignments!!";
-  for (let courseTitle in messageObject) {
+  for (const courseTitle in messageObject) {
     message += `\n- ${courseTitle}`
-    for (let assignmentName of messageObject[courseTitle]) {
+    for (const assignmentName of messageObject[courseTitle]) {
       message += `\n - ${assignmentName}`
     }
   }

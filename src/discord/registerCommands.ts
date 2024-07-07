@@ -9,7 +9,7 @@ export async function registerCommands(commands:CommandHandler){
     if(Object.keys(commands).length==0){
         throw new Error("No Commands Found")
     }
-    let discordCommandBody = toDiscordCommandBody(commands);
+    const discordCommandBody = toDiscordCommandBody(commands);
     const route = Routes.applicationCommands(env.CLIENT_ID)
     const requestData = {
         body:discordCommandBody

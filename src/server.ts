@@ -5,7 +5,7 @@ import type {
   CacheType,
   ChatInputCommandInteraction,
 } from "discord.js";
-import db, { Channel } from "./database/database";
+import { Channel } from "./database/database";
 import { getCommands } from "./discord/getCommands";
 import { registerCommands } from "./discord/registerCommands";
 import env from "./env/env";
@@ -13,7 +13,7 @@ import formatDateToBangkok from "./utils/formatDateToBangkok";
 import updateHandler from "./utils/updateHandler";
 import MutableWrapper from "./utils/MutableWrapper";
 
-export let hasEncounteredError: MutableWrapper<boolean> = new MutableWrapper(false);
+export const hasEncounteredError: MutableWrapper<boolean> = new MutableWrapper(false);
 
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
@@ -29,7 +29,7 @@ export interface CommandHandler {
     callback: (
       interaction: ChatInputCommandInteraction<CacheType>,
       calledChannel: Channel
-    ) => Promise<any>;
+    ) => Promise<unknown>;
   };
 }
 
@@ -39,13 +39,13 @@ client.on("interactionCreate", async (interaction: Interaction) => {
   }
   try {
     console.log("command triggered", interaction.commandName);
-    let command = commands[interaction.commandName as keyof CommandHandler];
+    const command = commands[interaction.commandName as keyof CommandHandler];
     if (command != undefined) {
       await interaction.reply({
         content: "working on it...",
         ephemeral: true,
       });
-      let calledChannel: Channel = {
+      const calledChannel: Channel = {
         guildID: interaction.guildId,
         channelID: interaction.channelId,
       };
@@ -55,7 +55,12 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     }
   } catch (e) {
     console.error("error occured", e);
-    adminDM.send((e as any).stack);
+    if(e instanceof Error){
+      adminDM.send("error: "+(e as Error).stack);
+    }
+    else{
+      adminDM.send("unknown error");
+    }
     await interaction.editReply("Error occured!");
   }
 });

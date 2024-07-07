@@ -1,13 +1,12 @@
 import * as dotenv from "dotenv";
-import { cleanEnv, str, email, json, bool, num, makeValidator, EnvError } from "envalid";
+import { cleanEnv, str, bool, num, makeValidator, EnvError } from "envalid";
 import { targetSemester, targetYear } from "../config/config";
-import { option } from "fp-ts";
 dotenv.config({
   path: "./.env",
 });
 
 const int = makeValidator<number>((input: string) => {
-  let parsed = parseInt(input);
+  const parsed = parseInt(input);
   if (!/^\d+$/.test(input) || Number.isNaN(parsed))
     throw new EnvError(`Invalid integer input: "${input}"`)
   return parsed;
