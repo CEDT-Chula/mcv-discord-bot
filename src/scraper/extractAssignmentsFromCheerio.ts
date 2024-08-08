@@ -9,15 +9,19 @@ export default async function extractAssignmentsFromCheerio(
   const assignments: Array<Assignment> = []
   for (let i = 0; i < assignmentNameNodes.length; i++) {
     const ele = assignmentNameNodes[i]
+    let assignmentLink = $(ele).attr("href");
+    const assignmentIdStr: string = assignmentLink!.match(/^.*\/(\d+)$/)![1];
+    let assignmentId: number = parseInt(assignmentIdStr,10);
     const assignment: Assignment = {
       mcvCourseID: mcvID,
       assignmentName: $(ele).text(),
+      assignmentID: assignmentId
     }
     const found = await db.assignmentExists(assignment)
     if (!found) {
-      console.log('found new assignment',assignment)
+      // console.log('found new assignment',assignment)
       assignments.push(assignment)
-      db.saveAssignment(assignment)
+      await db.saveAssignment(assignment)
     }
   }
   return assignments

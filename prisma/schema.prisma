@@ -6,6 +6,7 @@ model Assignment{
     mcvCourseID     Int     
     course          Course  @relation(fields:[mcvCourseID], references: [mcvID])
     assignmentName  String  @id @db.VarChar(255)
+    assignmentID    Int?
 }
 model Course{
     mcvID       Int         @id

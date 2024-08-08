@@ -137,6 +137,7 @@ namespace db {
 export type NotificationChannel = PrismaNotificationChannel
 export type Course = PrismaCourse
 export type Assignment = PrismaAssignment
+export type CourseWithAssignments = Course & { assignments: Array<Assignment>}
 
 export default db
 

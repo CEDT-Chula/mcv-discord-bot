@@ -1,4 +1,8 @@
-import db, { Assignment, Course } from '../database/database'
+import db, {
+  Assignment,
+  Course,
+  CourseWithAssignments,
+} from '../database/database'
 import updateAssignments from './updateAssignments'
 import updateCourses from './updateCourses'
 import * as option from 'fp-ts/Option'
@@ -10,33 +14,34 @@ import * as option from 'fp-ts/Option'
  */
 export async function updateAll(): Promise<string> {
   await updateCourses()
-  // console.log(assignmentsCache.keys(), coursesCache.keys())
   const coursesList = await db.getAllCoursesOfTargetSemester()
-  const assignments: Array<Assignment> = []
-  for await (const courses of coursesList) {
-    const newAssignments = await updateAssignments(courses.mcvID)
-    if (option.isSome(newAssignments)) {
-      newAssignments.value.forEach((element) => {
-        assignments.push(element)
+  const unfilteredCoursesWithAssignments: Array<CourseWithAssignments> =
+    await Promise.all(
+      coursesList.map(async (course) => {
+        const newAssignments = await updateAssignments(course.mcvID)
+        let newAssignmentsUnwrapped: Assignment[] = option.getOrElse(
+          () => [] as Assignment[]
+        )(newAssignments)
+        const result: CourseWithAssignments = {
+          ...course,
+          assignments: newAssignmentsUnwrapped,
+        }
+        return result
       })
+    )
+  const coursesWithAssignments = unfilteredCoursesWithAssignments.filter(
+    (course) => {
+      return course.assignments.length != 0
     }
-  }
-  const messageObject: Record<string, Array<string>> = {}
-  if (assignments.length == 0) {
+  )
+  if (coursesWithAssignments.length == 0) {
     return ''
   }
-  for (const assignment of assignments) {
-    const course = (await db.getCourse(assignment!.mcvCourseID)) as Course
-    if (messageObject[course.title] == null) {
-      messageObject[course.title] = []
-    }
-    messageObject[course.title].push(assignment!.assignmentName)
-  }
   let message: string = '## New Assignments!!'
-  for (const courseTitle in messageObject) {
-    message += `\n- ${courseTitle}`
-    for (const assignmentName of messageObject[courseTitle]) {
-      message += `\n - ${assignmentName}`
+  for (const course of coursesWithAssignments) {
+    message += `\n- ${course.title}`
+    for (const assignment of course.assignments) {
+      message += `\n - [${assignment.assignmentName}](https://www.mycourseville.com/?q=courseville/worksheet/${course.mcvID}/${assignment.assignmentID})`
     }
   }
   return message
