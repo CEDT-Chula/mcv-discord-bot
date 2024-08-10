@@ -2,20 +2,19 @@ const mockSaveAssignment = jest.fn().mockImplementation(()=>{})
 const mockAssignmentExists = jest
   .fn()
   .mockImplementation(async () => false)
-jest.mock('../src/database/database', () => {
+jest.mock('@/database/database', () => {
   return {
     assignmentExists: mockAssignmentExists,
     saveAssignment: mockSaveAssignment,
   }
 })
 
-import * as db from '../src/database/database'
-import extractAssignmentsFromCheerio from '../src/scraper/extractAssignmentsFromCheerio'
+import extractAssignmentsFromCheerio from '@/scraper/extractAssignmentsFromCheerio'
 import * as cheerio from 'cheerio'
 
-describe('', () => {
-  it('', async () => {
-    let html = `
+describe('parse assignments', () => {
+  it('assignmentId', async () => {
+    const html = `
       <html>
         <body>
           <table>
@@ -35,7 +34,7 @@ describe('', () => {
         </body>
       </html>
     `
-    let $ = cheerio.load(html);
+    const $ = cheerio.load(html);
     // console.log($('tbody tr td:nth-child(2) a').toArray())
     await extractAssignmentsFromCheerio(123, $)
     expect(mockAssignmentExists).toHaveBeenCalledTimes(1);

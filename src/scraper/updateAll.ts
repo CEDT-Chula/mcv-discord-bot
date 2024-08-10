@@ -1,6 +1,5 @@
 import db, {
   Assignment,
-  Course,
   CourseWithAssignments,
 } from '../database/database'
 import updateAssignments from './updateAssignments'
@@ -19,7 +18,7 @@ export async function updateAll(): Promise<string> {
     await Promise.all(
       coursesList.map(async (course) => {
         const newAssignments = await updateAssignments(course.mcvID)
-        let newAssignmentsUnwrapped: Assignment[] = option.getOrElse(
+        const newAssignmentsUnwrapped: Assignment[] = option.getOrElse(
           () => [] as Assignment[]
         )(newAssignments)
         const result: CourseWithAssignments = {

@@ -13,7 +13,7 @@ global.fetch = jest.fn(async () => {
   }
 }) as jest.Mock
 
-jest.mock('../src/env/env', () => {
+jest.mock('@/env/env', () => {
   return {
     COOKIE: 'cookie',
     ERROR_FETCHING_NOTIFICATION: false,
@@ -21,8 +21,8 @@ jest.mock('../src/env/env', () => {
   }
 })
 
-jest.mock('../src/server', () => {
-  const actualModule = jest.requireActual('../src/server')
+jest.mock('@/server', () => {
+  const actualModule = jest.requireActual('@/server')
   return {
     __esModule: true,
     ...actualModule,
@@ -33,23 +33,23 @@ jest.mock('../src/server', () => {
   }
 })
 
-jest.mock('../src/database/database', () => {
+jest.mock('@/database/database', () => {
   return {
     __esModule: true,
   }
 })
 
 const mockErrorFetchingNotify = jest.fn()
-jest.mock('../src/utils/errorFetchingNotify', () => ({
+jest.mock('@/utils/errorFetchingNotify', () => ({
   __esModule: true,
   default: mockErrorFetchingNotify,
 }))
 
-import fetchAndCatch from '../src/utils/fetchAndCatch'
-import { determineYearAndSemester } from '../src/scraper/determineYearAndSemester'
+import fetchAndCatch from '@/utils/fetchAndCatch'
+import { determineYearAndSemester } from '@/scraper/determineYearAndSemester'
 import { option } from 'fp-ts'
-import { targetSemester, targetYear } from '../src/config/config'
-import responseToCheerio from '../src/utils/responseToCheerio'
+import { targetSemester, targetYear } from '@/config/config'
+import responseToCheerio from '@/utils/responseToCheerio'
 
 let $: cheerio.Root
 describe('stop notify after encountered error', () => {

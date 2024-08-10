@@ -9,9 +9,9 @@ export default async function extractAssignmentsFromCheerio(
   const assignments: Array<Assignment> = []
   for (let i = 0; i < assignmentNameNodes.length; i++) {
     const ele = assignmentNameNodes[i]
-    let assignmentLink = $(ele).attr("href");
+    const assignmentLink = $(ele).attr("href");
     const assignmentIdStr: string = assignmentLink!.match(/^.*\/(\d+)$/)![1];
-    let assignmentId: number = parseInt(assignmentIdStr,10);
+    const assignmentId: number = parseInt(assignmentIdStr,10);
     const assignment: Assignment = {
       mcvCourseID: mcvID,
       assignmentName: $(ele).text(),
