@@ -30,13 +30,14 @@
     "prisma": "^5.16.1",
     "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^7.15.0"
   },
   "scripts": {
     "migrate": "prisma db push",
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && tsc && tsc-alias",
     "start": "prisma db push && node ./build/start.js",
     "dev": "prisma generate && prisma db push && nodemon ./src/start.ts",
     "test": "jest",
