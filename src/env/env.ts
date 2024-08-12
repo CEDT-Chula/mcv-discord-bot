@@ -43,8 +43,8 @@ if (
   )
 }
 if (!env.AUTO_DETERMINE_YEAR_AND_SEMESTER) {
-  targetYear.set(yearAndSemesterEnv.YEAR!)
-  targetSemester.set(yearAndSemesterEnv.SEMESTER!)
+  targetYear.value = yearAndSemesterEnv.YEAR!
+  targetSemester.value=yearAndSemesterEnv.SEMESTER!
 }
 
 export default env

@@ -8,6 +8,7 @@ import formatDateToBangkok from './utils/formatDateToBangkok'
 import updateHandler from './utils/updateHandler'
 import MutableWrapper from './utils/MutableWrapper'
 import DiscordCommandHandler from './interfaces/DiscordCommandHandler'
+import {isSome} from 'fp-ts/lib/Option'
 
 export const hasEncounteredError: MutableWrapper<boolean> = new MutableWrapper(
   false
@@ -58,7 +59,7 @@ client.on('ready', async () => {
   adminDM = await client.users.createDM(env.ADMIN_USER_ID)
   adminDM.send('server is up!')
 
-  if (await updateHandler()) {
+  if (isSome(await updateHandler())) {
     intervalId = setInterval(updateHandler, env.DELAY * 1000)
   }
 })

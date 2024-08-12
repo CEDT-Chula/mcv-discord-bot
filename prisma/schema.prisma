@@ -5,8 +5,9 @@ datasource db {
 model Assignment{
     mcvCourseID     Int     
     course          Course  @relation(fields:[mcvCourseID], references: [mcvID])
-    assignmentName  String  @id @db.VarChar(255)
-    assignmentID    Int?
+    assignmentName  String  @db.VarChar(255)
+    assignmentID    Int
+    @@id([assignmentID, mcvCourseID])
 }
 model Course{
     mcvID       Int         @id

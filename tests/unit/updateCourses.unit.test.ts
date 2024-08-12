@@ -36,7 +36,7 @@ describe('stop notify after encountered error', () => {
     }))
   })
   beforeEach(() => {
-    hasEncounteredError.set(false)
+    hasEncounteredError.value=false
     mockErrorFetchingNotify.mockClear()
   })
 
@@ -47,8 +47,8 @@ describe('stop notify after encountered error', () => {
   })
 
   test('already encountered', async () => {
-    hasEncounteredError.set(true)
-    expect(hasEncounteredError.get()).toBe(true)
+    hasEncounteredError.value=true
+    expect(hasEncounteredError.value).toBe(true)
     await updateCourses()
     expect(mockErrorFetchingNotify).not.toHaveBeenCalled()
   })

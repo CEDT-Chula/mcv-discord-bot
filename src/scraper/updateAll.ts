@@ -1,47 +1,82 @@
+import {
+  ASSIGNMENT_MESSAGE_PATTERN,
+  COURSE_MESSAGE_PATTERN,
+  MAX_DISCORD_MESSAGE_SIZE,
+  NEW_ASSIGNMENTS_MESSAGE,
+  NEW_ASSIGNMENTS_MESSAGE_SIZE,
+} from '@/config/config'
 import db, {
   Assignment,
-  CourseWithAssignments,
+  Course,
 } from '../database/database'
 import updateAssignments from './updateAssignments'
 import updateCourses from './updateCourses'
 import * as option from 'fp-ts/Option'
+import MutableWrapper from '@/utils/MutableWrapper'
+import {format} from 'util'
 
 /**
  * @description update assignments of each course
  * @returns message containing new added assignments
  * @throws {Error}
  */
-export async function updateAll(): Promise<string> {
+export async function updateAll(): Promise<Array<string>> {
   await updateCourses()
   const coursesList = await db.getAllCoursesOfTargetSemester()
-  const unfilteredCoursesWithAssignments: Array<CourseWithAssignments> =
-    await Promise.all(
-      coursesList.map(async (course) => {
-        const newAssignments = await updateAssignments(course.mcvID)
-        const newAssignmentsUnwrapped: Assignment[] = option.getOrElse(
-          () => [] as Assignment[]
-        )(newAssignments)
-        const result: CourseWithAssignments = {
-          ...course,
-          assignments: newAssignmentsUnwrapped,
-        }
-        return result
-      })
+  const coursesWithAssignments: Map<Course, Array<Assignment>> = new Map()
+  for await (const course of coursesList) {
+    const newAssignments: option.Option<Assignment[]> = await updateAssignments(
+      course.mcvID
     )
-  const coursesWithAssignments = unfilteredCoursesWithAssignments.filter(
-    (course) => {
-      return course.assignments.length != 0
+    if (option.isNone(newAssignments) || newAssignments.value.length == 0) {
+      continue
     }
+    coursesWithAssignments.set(course, newAssignments.value)
+  }
+  if (coursesWithAssignments.size == 0) {
+    return []
+  }
+  const messages: string[] = []
+  const currentMessage: MutableWrapper<string> = new MutableWrapper(
+    NEW_ASSIGNMENTS_MESSAGE
   )
-  if (coursesWithAssignments.length == 0) {
-    return ''
-  }
-  let message: string = '## New Assignments!!'
-  for (const course of coursesWithAssignments) {
-    message += `\n- ${course.title}`
-    for (const assignment of course.assignments) {
-      message += `\n - [${assignment.assignmentName}](https://www.mycourseville.com/?q=courseville/worksheet/${course.mcvID}/${assignment.assignmentID})`
+  const currentMessageSize: MutableWrapper<number> = new MutableWrapper(
+    NEW_ASSIGNMENTS_MESSAGE_SIZE
+  )
+  for (const [course, assignments] of coursesWithAssignments) {
+    // const newCourseLine = `\n- ${course.title}`
+    const newCourseLine = format(COURSE_MESSAGE_PATTERN,course.title)
+    currentMessageSize.value += [...newCourseLine].length
+    const hasExceeded = currentMessageSize.value > MAX_DISCORD_MESSAGE_SIZE
+    if (hasExceeded) {
+      pushAndReinitialize(messages,currentMessage,currentMessageSize)
+    }
+    for (const assignment of assignments) {
+      // const newAssignmentLine = `\n - [${assignment.assignmentName}](https://www.mycourseville.com/?q=courseville/worksheet/${course.mcvID}/${assignment.assignmentID})`
+      const newAssignmentLine = format(ASSIGNMENT_MESSAGE_PATTERN,assignment.assignmentName,course.mcvID,assignment.assignmentID)
+      currentMessageSize.value += [...newAssignmentLine].length
+      const hasExceeded = currentMessageSize.value > MAX_DISCORD_MESSAGE_SIZE
+      const isFirstAssignment = assignments[0] == assignment
+      if (hasExceeded) {
+        pushAndReinitialize(messages,currentMessage,currentMessageSize)
+        currentMessage.value += newCourseLine
+        currentMessageSize.value += [...newCourseLine].length
+      } else if (isFirstAssignment) {
+        currentMessage.value += newCourseLine
+      }
+      currentMessage.value += newAssignmentLine
     }
   }
-  return message
+  messages.push(currentMessage.value)
+  return messages
+}
+
+function pushAndReinitialize(
+  messages: string[],
+  currentMessage: MutableWrapper<string>,
+  currentMessageSize: MutableWrapper<number>,
+){
+  messages.push(currentMessage.value)
+  currentMessage.value = NEW_ASSIGNMENTS_MESSAGE
+  currentMessageSize.value = NEW_ASSIGNMENTS_MESSAGE_SIZE
 }

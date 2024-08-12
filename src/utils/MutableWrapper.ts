@@ -1,12 +1,12 @@
 export default class MutableWrapper<T> {
-  value: T
+  _value: T
   constructor(value: T) {
-    this.value = value
+    this._value = value
   }
-  get() {
-    return this.value
+  get value() {
+    return this._value
   }
-  set(newValue: T) {
-    this.value = newValue
+  set value(newValue: T) {
+    this._value = newValue
   }
 }

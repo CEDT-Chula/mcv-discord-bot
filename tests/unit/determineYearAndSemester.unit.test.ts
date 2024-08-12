@@ -65,7 +65,7 @@ describe('stop notify after encountered error', () => {
 
   test('', async () => {
     determineYearAndSemester($)
-    expect(targetYear.get()).toBe(2023)
-    expect(targetSemester.get()).toBe(3)
+    expect(targetYear.value).toBe(2023)
+    expect(targetSemester.value).toBe(3)
   })
 })

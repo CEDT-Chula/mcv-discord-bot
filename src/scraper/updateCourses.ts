@@ -23,7 +23,7 @@ export default async function updateCourses(): Promise<void> {
     determineYearAndSemester($)
   }
   const courseElements: cheerio.Element[] = $(
-    `#courseville-courseicongroup-icon-lineup-${targetYear.get()}-${targetSemester.get()}-join a`
+    `#courseville-courseicongroup-icon-lineup-${targetYear.value}-${targetSemester.value}-join a`
   ).toArray()
   for (let courseElement of courseElements) {
     courseElement = courseElement as cheerio.TagElement

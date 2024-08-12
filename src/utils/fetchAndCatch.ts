@@ -19,24 +19,24 @@ export default async function fetchAndCatch(
     },
     body: body,
   }).catch(async (_e) => {
-    if (hasEncounteredError.get()) {
+    if (hasEncounteredError.value) {
       return
     }
-    hasEncounteredError.set(true)
+    hasEncounteredError.value=true
     await errorFetchingNotify(NotifyMessage.FetchingError)
   })
   if (response == undefined) {
     return option.none
   }
   if (response.status != 200) {
-    if (hasEncounteredError.get()) {
+    if (hasEncounteredError.value) {
       return option.none
     }
     console.log(await response.text())
-    hasEncounteredError.set(true)
+    hasEncounteredError.value=true
     await errorFetchingNotify(NotifyMessage.FetchingError)
     return option.none
   }
-  hasEncounteredError.set(false)
+  hasEncounteredError.value=false
   return option.some(response)
 }

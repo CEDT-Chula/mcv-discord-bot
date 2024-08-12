@@ -70,8 +70,8 @@ namespace db {
   export async function getAllCoursesOfTargetSemester(): Promise<Course[]> {
     return await prisma.course.findMany({
       where:{
-        year: targetYear.get(),
-        semester: targetSemester.get()
+        year: targetYear.value,
+        semester: targetSemester.value
       }
     })
   }
