@@ -23,10 +23,10 @@ export default async function updateAssignments(
 
   let assignments = await extractAssignmentsFromCheerio(mcvID, $)
 
-  const optionalResult = await scrapeAssignmentsOfPage(mcvID,5);
-  if(option.isSome(optionalResult)){
-    assignments = assignments.concat(optionalResult.value!);
+  const optionalResult = await scrapeAssignmentsOfPage(mcvID, 5)
+  if (option.isSome(optionalResult)) {
+    assignments = assignments.concat(optionalResult.value!)
   }
-  
+
   return option.some(assignments)
 }

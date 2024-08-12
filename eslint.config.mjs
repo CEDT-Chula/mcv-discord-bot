@@ -1,27 +1,26 @@
 import globals from "globals";
-import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
 import unusedImports from "eslint-plugin-unused-imports";
-
-export default [
+export default tseslint.config(
   {
-    files: ["src/**/*.ts"]
-  },
-  {
-    ignores: ["build/**/*"]
-  },
-  { languageOptions: { globals: globals.browser } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  {
+    files: ["src/**/*.ts","tests/**/*.ts"],
+    languageOptions: {
+      parser: tsParser,
+      globals: globals.node
+    },
     plugins: {
-      "unused-imports": unusedImports
+      "unused-imports": unusedImports,
+      "@typescript-eslint": tsPlugin
     },
     rules: {
+      ...tsPlugin.configs.recommended.rules,
       "no-unused-vars": "off",
       "no-undef": "off",
       "unused-imports/no-unused-imports": "error",
-      "@typescript-eslint/no-unused-vars": [
+      "@typescript-eslint/no-unused-vars": 
+      [
         "error",
         {
           "varsIgnorePattern": "^_",
@@ -29,7 +28,7 @@ export default [
           "caughtErrorsIgnorePattern": "^_"
         }
       ],
-      // "@typescript-eslint/no-explicit-any": "off"
+      "@typescript-eslint/no-explicit-any": "off"
     }
   },
-];
+)

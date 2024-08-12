@@ -2,10 +2,7 @@ import { option } from 'fp-ts'
 import fetchAndCatch from '../utils/fetchAndCatch'
 import { Assignment } from '../database/database'
 import * as cheerio from 'cheerio'
-import { hasEncounteredError } from '../server'
-import errorFetchingNotify from '../utils/errorFetchingNotify'
 import LoadMoreAssignmentsResponse from '../interfaces/LoadMoreAssignmentsResponse'
-import { NotifyMessage } from '../config/config'
 import extractAssignmentsFromCheerio from './extractAssignmentsFromCheerio'
 
 /**
@@ -28,7 +25,7 @@ export default async function scrapeAssignmentsOfPage(
   const resultJson: LoadMoreAssignmentsResponse = await response?.json()
 
   if (resultJson.status == 0) {
-    return option.none;
+    return option.none
   }
 
   const $ = cheerio.load(
@@ -36,11 +33,11 @@ export default async function scrapeAssignmentsOfPage(
   )
 
   let assignments = await extractAssignmentsFromCheerio(mcvID, $)
-  
+
   if (resultJson.all == undefined || resultJson.all !== true) {
-    let optionalResult = await scrapeAssignmentsOfPage(mcvID, next + 5);
-    if(option.isSome(optionalResult)){
-      assignments = assignments.concat(optionalResult.value);
+    const optionalResult = await scrapeAssignmentsOfPage(mcvID, next + 5)
+    if (option.isSome(optionalResult)) {
+      assignments = assignments.concat(optionalResult.value)
     }
   }
   return option.some(assignments)
