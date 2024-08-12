@@ -8,7 +8,7 @@ import formatDateToBangkok from './utils/formatDateToBangkok'
 import updateHandler from './utils/updateHandler'
 import MutableWrapper from './utils/MutableWrapper'
 import DiscordCommandHandler from './interfaces/DiscordCommandHandler'
-import {isSome} from 'fp-ts/lib/Option'
+import { isSome } from 'fp-ts/lib/Option'
 
 export const hasEncounteredError: MutableWrapper<boolean> = new MutableWrapper(
   false

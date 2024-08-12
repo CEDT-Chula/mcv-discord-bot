@@ -1,4 +1,4 @@
-global.fetch = jest.fn();
+global.fetch = jest.fn()
 
 jest.mock('@/env/env', () => {
   return {
@@ -30,13 +30,13 @@ import updateCourses from '@/scraper/updateCourses'
 import { hasEncounteredError } from '@/server'
 
 describe('stop notify after encountered error', () => {
-  beforeAll(()=>{
-    (global.fetch as jest.Mock).mockImplementation((async () => {
+  beforeAll(() => {
+    ;(global.fetch as jest.Mock).mockImplementation(async () => {
       throw new Error('')
-    }))
+    })
   })
   beforeEach(() => {
-    hasEncounteredError.value=false
+    hasEncounteredError.value = false
     mockErrorFetchingNotify.mockClear()
   })
 
@@ -47,7 +47,7 @@ describe('stop notify after encountered error', () => {
   })
 
   test('already encountered', async () => {
-    hasEncounteredError.value=true
+    hasEncounteredError.value = true
     expect(hasEncounteredError.value).toBe(true)
     await updateCourses()
     expect(mockErrorFetchingNotify).not.toHaveBeenCalled()

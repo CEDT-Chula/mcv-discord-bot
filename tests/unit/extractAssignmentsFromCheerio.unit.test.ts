@@ -1,7 +1,5 @@
-const mockSaveAssignment = jest.fn().mockImplementation(()=>{})
-const mockAssignmentExists = jest
-  .fn()
-  .mockImplementation(async () => false)
+const mockSaveAssignment = jest.fn().mockImplementation(() => {})
+const mockAssignmentExists = jest.fn().mockImplementation(async () => false)
 jest.mock('@/database/database', () => {
   return {
     assignmentExists: mockAssignmentExists,
@@ -34,10 +32,10 @@ describe('parse assignments', () => {
         </body>
       </html>
     `
-    const $ = cheerio.load(html);
+    const $ = cheerio.load(html)
     // console.log($('tbody tr td:nth-child(2) a').toArray())
     await extractAssignmentsFromCheerio(123, $)
-    expect(mockAssignmentExists).toHaveBeenCalledTimes(1);
+    expect(mockAssignmentExists).toHaveBeenCalledTimes(1)
     expect(mockSaveAssignment).toHaveBeenCalledTimes(1)
     expect(mockSaveAssignment).toHaveBeenCalledWith({
       mcvCourseID: 123,

@@ -5,15 +5,12 @@ import {
   NEW_ASSIGNMENTS_MESSAGE,
   NEW_ASSIGNMENTS_MESSAGE_SIZE,
 } from '@/config/config'
-import db, {
-  Assignment,
-  Course,
-} from '../database/database'
+import db, { Assignment, Course } from '../database/database'
 import updateAssignments from './updateAssignments'
 import updateCourses from './updateCourses'
 import * as option from 'fp-ts/Option'
 import MutableWrapper from '@/utils/MutableWrapper'
-import {format} from 'util'
+import { format } from 'util'
 
 /**
  * @description update assignments of each course
@@ -45,20 +42,25 @@ export async function updateAll(): Promise<Array<string>> {
   )
   for (const [course, assignments] of coursesWithAssignments) {
     // const newCourseLine = `\n- ${course.title}`
-    const newCourseLine = format(COURSE_MESSAGE_PATTERN,course.title)
+    const newCourseLine = format(COURSE_MESSAGE_PATTERN, course.title)
     currentMessageSize.value += [...newCourseLine].length
     const hasExceeded = currentMessageSize.value > MAX_DISCORD_MESSAGE_SIZE
     if (hasExceeded) {
-      pushAndReinitialize(messages,currentMessage,currentMessageSize)
+      pushAndReinitialize(messages, currentMessage, currentMessageSize)
     }
     for (const assignment of assignments) {
       // const newAssignmentLine = `\n - [${assignment.assignmentName}](https://www.mycourseville.com/?q=courseville/worksheet/${course.mcvID}/${assignment.assignmentID})`
-      const newAssignmentLine = format(ASSIGNMENT_MESSAGE_PATTERN,assignment.assignmentName,course.mcvID,assignment.assignmentID)
+      const newAssignmentLine = format(
+        ASSIGNMENT_MESSAGE_PATTERN,
+        assignment.assignmentName,
+        course.mcvID,
+        assignment.assignmentID
+      )
       currentMessageSize.value += [...newAssignmentLine].length
       const hasExceeded = currentMessageSize.value > MAX_DISCORD_MESSAGE_SIZE
       const isFirstAssignment = assignments[0] == assignment
       if (hasExceeded) {
-        pushAndReinitialize(messages,currentMessage,currentMessageSize)
+        pushAndReinitialize(messages, currentMessage, currentMessageSize)
         currentMessage.value += newCourseLine
         currentMessageSize.value += [...newCourseLine].length
       } else if (isFirstAssignment) {
@@ -74,8 +76,8 @@ export async function updateAll(): Promise<Array<string>> {
 function pushAndReinitialize(
   messages: string[],
   currentMessage: MutableWrapper<string>,
-  currentMessageSize: MutableWrapper<number>,
-){
+  currentMessageSize: MutableWrapper<number>
+) {
   messages.push(currentMessage.value)
   currentMessage.value = NEW_ASSIGNMENTS_MESSAGE
   currentMessageSize.value = NEW_ASSIGNMENTS_MESSAGE_SIZE

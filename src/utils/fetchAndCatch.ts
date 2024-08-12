@@ -22,7 +22,7 @@ export default async function fetchAndCatch(
     if (hasEncounteredError.value) {
       return
     }
-    hasEncounteredError.value=true
+    hasEncounteredError.value = true
     await errorFetchingNotify(NotifyMessage.FetchingError)
   })
   if (response == undefined) {
@@ -33,10 +33,10 @@ export default async function fetchAndCatch(
       return option.none
     }
     console.log(await response.text())
-    hasEncounteredError.value=true
+    hasEncounteredError.value = true
     await errorFetchingNotify(NotifyMessage.FetchingError)
     return option.none
   }
-  hasEncounteredError.value=false
+  hasEncounteredError.value = false
   return option.some(response)
 }

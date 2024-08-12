@@ -4,19 +4,19 @@ import env from '../env/env'
 import { updateAll } from '../scraper/updateAll'
 import { client } from '../server'
 import formatDateToBangkok from './formatDateToBangkok'
-import {none, Option, some} from 'fp-ts/lib/Option'
+import { none, Option, some } from 'fp-ts/lib/Option'
 
 /**
  * @description update assignments and send message to all notification channels
  *  */
-export default async function updateHandler(): Promise<Option<boolean>>{
+export default async function updateHandler(): Promise<Option<boolean>> {
   if (env.INTERVAL_LOGGING) {
     console.log('new interval started at ' + formatDateToBangkok(new Date()))
   }
   let messages: Array<string> = []
   try {
     messages = await updateAll()
-    console.log("messages",messages)
+    console.log('messages', messages)
   } catch (e) {
     console.log(e)
     return none

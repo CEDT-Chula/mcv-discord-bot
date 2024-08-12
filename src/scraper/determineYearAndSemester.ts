@@ -8,6 +8,6 @@ export async function determineYearAndSemester($: cheerio.Root): Promise<void> {
     return
   }
   const [_beforeSplit, currentYear, currentSemester] = split
-  targetYear.value=parseInt(currentYear)
-  targetSemester.value=parseInt(currentSemester)
+  targetYear.value = parseInt(currentYear)
+  targetSemester.value = parseInt(currentSemester)
 }

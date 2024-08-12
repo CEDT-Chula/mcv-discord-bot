@@ -9,12 +9,11 @@ export default {
     interaction: ChatInputCommandInteraction<CacheType>,
     _calledChannel: NotificationChannel
   ) => {
-      const isUpToDate = await updateHandler();
-      if(isUpToDate){
-        await interaction.editReply('Assignments are up to date!')
-      }
-      else{
-        await interaction.editReply('Done!')
-      }
+    const isUpToDate = await updateHandler()
+    if (isUpToDate) {
+      await interaction.editReply('Assignments are up to date!')
+    } else {
+      await interaction.editReply('Done!')
+    }
   },
 }

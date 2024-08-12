@@ -5,7 +5,7 @@ import {
   NotificationChannel as PrismaNotificationChannel,
 } from '@prisma/client'
 import { assignmentsCache, coursesCache } from './cache'
-import {targetSemester, targetYear} from '../config/config'
+import { targetSemester, targetYear } from '../config/config'
 
 const prisma = new PrismaClient()
 
@@ -69,10 +69,10 @@ namespace db {
 
   export async function getAllCoursesOfTargetSemester(): Promise<Course[]> {
     return await prisma.course.findMany({
-      where:{
+      where: {
         year: targetYear.value,
-        semester: targetSemester.value
-      }
+        semester: targetSemester.value,
+      },
     })
   }
 
@@ -137,7 +137,7 @@ namespace db {
 export type NotificationChannel = PrismaNotificationChannel
 export type Course = PrismaCourse
 export type Assignment = PrismaAssignment
-export type CourseWithAssignments = Course & { assignments: Array<Assignment>}
+export type CourseWithAssignments = Course & { assignments: Array<Assignment> }
 
 export default db
 

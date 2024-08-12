@@ -25,7 +25,7 @@ export default async function scrapeAssignmentsOfPage(
   const resultJson: LoadMoreAssignmentsResponse = await response?.json()
 
   if (resultJson.status == 0) {
-    return option.none;
+    return option.none
   }
 
   const $ = cheerio.load(
@@ -33,11 +33,11 @@ export default async function scrapeAssignmentsOfPage(
   )
 
   let assignments = await extractAssignmentsFromCheerio(mcvID, $)
-  
+
   if (resultJson.all == undefined || resultJson.all !== true) {
-    const optionalResult = await scrapeAssignmentsOfPage(mcvID, next + 5);
-    if(option.isSome(optionalResult)){
-      assignments = assignments.concat(optionalResult.value);
+    const optionalResult = await scrapeAssignmentsOfPage(mcvID, next + 5)
+    if (option.isSome(optionalResult)) {
+      assignments = assignments.concat(optionalResult.value)
     }
   }
   return option.some(assignments)

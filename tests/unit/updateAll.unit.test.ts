@@ -100,7 +100,7 @@ describe('updateAll', () => {
     const expected: string[] = [
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n - [งานที่ 1](https://www.mycourseville.com/?q=courseville/worksheet/123/456)`+
+        `\n - [งานที่ 1](https://www.mycourseville.com/?q=courseville/worksheet/123/456)` +
         '\n- How to Make Mcv bot 101' +
         `\n - [งานที่ 1 นะจ๊ะ](https://www.mycourseville.com/?q=courseville/worksheet/540/456)`,
     ]
@@ -155,7 +155,7 @@ describe('updateAll', () => {
         '\n- How to Rickroll 101' +
         `\n - [${'ค'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/150)`,
     ]
-    assertAndExpect(result,expected,updateAllSpy);
+    assertAndExpect(result, expected, updateAllSpy)
   })
 
   it('exceed limit in the same course: edge case: 2000 chars after ข', async () => {

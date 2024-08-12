@@ -54,9 +54,9 @@ import responseToCheerio from '@/utils/responseToCheerio'
 let $: cheerio.Root
 describe('stop notify after encountered error', () => {
   beforeAll(async () => {
-    const result = await fetchAndCatch(`https://www.mycourseville.com/`,"GET");
-    const optionalCheerioRoot = await responseToCheerio(result);
-    expect(option.isSome(optionalCheerioRoot));
+    const result = await fetchAndCatch(`https://www.mycourseville.com/`, 'GET')
+    const optionalCheerioRoot = await responseToCheerio(result)
+    expect(option.isSome(optionalCheerioRoot))
     if (option.isNone(optionalCheerioRoot)) {
       return
     }
