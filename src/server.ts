@@ -72,7 +72,7 @@ export async function start() {
   await registerCommands(commands)
 
   // let channels = await db.getAllChannels();
-  console.log("found commands",Object.keys(commands))
+  console.log('found commands', Object.keys(commands))
   client.login(env.DISCORD_TOKEN)
 }
 
