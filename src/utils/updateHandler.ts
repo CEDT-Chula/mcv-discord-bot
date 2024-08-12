@@ -16,7 +16,6 @@ export default async function updateHandler(): Promise<Option<boolean>> {
   let messages: Array<string> = []
   try {
     messages = await updateAll()
-    console.log('messages', messages)
   } catch (e) {
     console.log(e)
     return none

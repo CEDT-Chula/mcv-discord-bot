@@ -5,10 +5,10 @@ import DiscordCommandHandler from '../interfaces/DiscordCommandHandler'
 export async function getCommands(): Promise<DiscordCommandHandler> {
   const commands: DiscordCommandHandler = {}
   const commandFiles = fs.readdirSync(path.join(__dirname, '../commands'))
-  for (const file of commandFiles) {
+  await Promise.all(commandFiles.map(async (file)=>{
     const { default: command } = await import(`../commands/${file}`)
     commands[command.name] = command
-  }
+  }))
   return commands
 }
 

@@ -43,11 +43,14 @@ export async function updateAll(): Promise<Array<string>> {
   for (const [course, assignments] of coursesWithAssignments) {
     // const newCourseLine = `\n- ${course.title}`
     const newCourseLine = format(COURSE_MESSAGE_PATTERN, course.title)
-    currentMessageSize.value += [...newCourseLine].length
-    const hasExceeded = currentMessageSize.value > MAX_DISCORD_MESSAGE_SIZE
+    const newAssignmentLineSize = [...newCourseLine].length
+    const hasExceeded =
+      currentMessageSize.value + newAssignmentLineSize >
+      MAX_DISCORD_MESSAGE_SIZE
     if (hasExceeded) {
       pushAndReinitialize(messages, currentMessage, currentMessageSize)
     }
+    currentMessageSize.value += [...newCourseLine].length
     for (const assignment of assignments) {
       // const newAssignmentLine = `\n - [${assignment.assignmentName}](https://www.mycourseville.com/?q=courseville/worksheet/${course.mcvID}/${assignment.assignmentID})`
       const newAssignmentLine = format(
@@ -56,8 +59,10 @@ export async function updateAll(): Promise<Array<string>> {
         course.mcvID,
         assignment.assignmentID
       )
-      currentMessageSize.value += [...newAssignmentLine].length
-      const hasExceeded = currentMessageSize.value > MAX_DISCORD_MESSAGE_SIZE
+      const newAssignmentLineSize = [...newAssignmentLine].length
+      const hasExceeded =
+        currentMessageSize.value + newAssignmentLineSize >
+        MAX_DISCORD_MESSAGE_SIZE
       const isFirstAssignment = assignments[0] == assignment
       if (hasExceeded) {
         pushAndReinitialize(messages, currentMessage, currentMessageSize)
@@ -67,6 +72,7 @@ export async function updateAll(): Promise<Array<string>> {
         currentMessage.value += newCourseLine
       }
       currentMessage.value += newAssignmentLine
+      currentMessageSize.value += newAssignmentLineSize
     }
   }
   messages.push(currentMessage.value)
