@@ -3,6 +3,10 @@ const mockGetAllCoursesOfTargetSemester = jest.fn()
 const mockUpdateAssignments = jest.fn()
 jest.mock('@/scraper/updateCourses')
 
+jest.mock('@/env/env', () => {
+  return {}
+})
+
 jest.mock('@/database/database', () => {
   return {
     getAllCoursesOfTargetSemester: mockGetAllCoursesOfTargetSemester,
