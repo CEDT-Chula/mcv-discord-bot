@@ -9,7 +9,7 @@ WORKDIR /home/node/app
 COPY . .
 
 # Install dependencies
-RUN npm ci --omit=dev
+RUN npm ci
 
 RUN npm run build
 
