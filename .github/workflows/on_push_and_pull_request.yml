@@ -14,3 +14,8 @@ jobs:
     - run: npm test
     - run: npm run lint
     - run: npm run checkStyle
+    - run: npm run build
+    - run: |
+        if ! [ -f build/start.js ]; then
+          exit 1;
+        fi

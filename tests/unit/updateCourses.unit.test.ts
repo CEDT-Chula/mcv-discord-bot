@@ -14,9 +14,9 @@ jest.mock('@/server', () => {
     __esModule: true,
     ...actualModule,
     adminDM: {
-      send: jest.fn().mockImplementation(() => {}),
+      send: jest.fn(),
     },
-    start: jest.fn().mockImplementation(() => {}),
+    start: jest.fn(),
   }
 })
 
