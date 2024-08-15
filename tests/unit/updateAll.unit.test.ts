@@ -24,7 +24,6 @@ import { Assignment } from '@/database/database'
 import { updateAll } from '@/scraper/updateAll'
 import { Course } from '@prisma/client'
 import { none, some } from 'fp-ts/lib/Option'
-import assert from 'assert'
 describe('updateAll', () => {
   let coursesFromUpdate: Course[] = []
   let assignmentsOfCourseFromUpdate: Record<number, Assignment[]> = {}
@@ -229,9 +228,6 @@ describe('updateAll', () => {
         `\n - [${'ข'.repeat(969)}](https://www.mycourseville.com/?q=courseville/worksheet/123/789)` +
         `\n - [${'ค'.repeat(849)}](https://www.mycourseville.com/?q=courseville/worksheet/123/150)`,
     ]
-    for (const expectedStr of expected) {
-      assert.equal([...expectedStr].length <= 2000, true)
-    }
     assertAndExpect(result, expected, updateAllSpy)
   })
 
@@ -269,18 +265,18 @@ describe('updateAll', () => {
         '\n- How to Make Mcv bot 101' +
         `\n - [${'ค'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/540/150)`,
     ]
-    for (const expectedStr of expected) {
-      assert.equal([...expectedStr].length <= 2000, true)
-    }
     assertAndExpect(result, expected, updateAllSpy)
   })
 })
 
 function assertAndExpect(
   result: unknown,
-  expected: unknown,
+  expected: string[],
   updateAllSpy: jest.Mock
 ) {
-  assert.deepEqual(result, expected)
+  for (const expectedStr of expected) {
+    expect([...expectedStr].length).toBeLessThanOrEqual(2000)
+  }
+  expect(result).toEqual(expected)
   expect(updateAllSpy).toHaveBeenCalledTimes(1)
 }

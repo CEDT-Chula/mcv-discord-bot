@@ -4,10 +4,8 @@ const cacheOption = {
   stdTTL: 10000, //seconds
   deleteOnExpire: true,
 }
-// const assignmentsRawCache = new NodeCache();
-// const coursesRawCache = new NodeCache();
 
-class wrapperCache<T> {
+class WrapperCache<T> {
   _rawCache = new NodeCache(cacheOption)
   set(key: string, value: T) {
     this._rawCache.set(key, value)
@@ -17,6 +15,5 @@ class wrapperCache<T> {
   }
 }
 
-export const assignmentsCache = new wrapperCache<Assignment>()
-export const coursesCache = new wrapperCache<Course>()
-// export ={assignmentsCache, coursesCache};
+export const assignmentsCache = new WrapperCache<Assignment>()
+export const coursesCache = new WrapperCache<Course>()
