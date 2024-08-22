@@ -32,7 +32,6 @@ export default async function fetchAndCatch(
     if (hasEncounteredError.value) {
       return option.none
     }
-    console.log(await response.text())
     hasEncounteredError.value = true
     await errorFetchingNotify(NotifyMessage.FetchingError)
     return option.none
