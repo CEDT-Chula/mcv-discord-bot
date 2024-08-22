@@ -4,7 +4,7 @@ export async function determineYearAndSemester($: cheerio.Root): Promise<void> {
   const currentYearAndSemester = $('h2').first().text()
   const split = /(\d+)\/(\d+)/.exec(currentYearAndSemester)
   if (split == undefined) {
-    console.log('error cannot parse year and semester: ', split)
+    console.trace('error cannot parse year and semester: ', split)
     return
   }
   const [_beforeSplit, currentYear, currentSemester] = split

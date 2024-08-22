@@ -4,7 +4,7 @@ import { adminDM, client } from '@/server'
 import updateHandler from '@/utils/updateHandler'
 import { DiscordAPIError } from 'discord.js'
 
-jest.mock("@/env/env");
+jest.mock("@/env/env", ()=>{});
 jest.mock('@/server', () => {
   return {
     client: {

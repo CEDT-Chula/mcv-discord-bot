@@ -45,7 +45,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
       await interaction.reply('command not found')
     }
   } catch (e) {
-    console.error('error occured', e)
+    console.trace('error occured', e)
     if (e instanceof Error) {
       adminDM.send('error: ' + (e as Error).stack)
     } else {
