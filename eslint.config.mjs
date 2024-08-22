@@ -1,9 +1,8 @@
 import globals from "globals";
-import tseslint from "typescript-eslint";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import unusedImports from "eslint-plugin-unused-imports";
-export default tseslint.config(
+export default [
   {
     files: ["src/**/*.ts","tests/**/*.ts"],
     languageOptions: {
@@ -31,4 +30,7 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "off"
     }
   },
-)
+  {
+    ignores: ["*","!src","!tests"]
+  }
+]

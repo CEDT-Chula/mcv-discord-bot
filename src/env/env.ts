@@ -19,7 +19,6 @@ const env = cleanEnv(process.env, {
   ADMIN_USER_ID: str(),
   COOKIE: str(),
   DELAY: num(),
-  INTERVAL_LOGGING: bool({ default: false }),
   ERROR_FETCHING_NOTIFICATION: bool({ default: false }),
   AUTO_DETERMINE_YEAR_AND_SEMESTER: bool(),
 })

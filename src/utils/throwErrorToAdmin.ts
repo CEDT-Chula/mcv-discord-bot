@@ -1,6 +1,6 @@
-import { adminDM, getIntervalId } from '../server'
+import { adminDM, intervalId } from '../server'
 
 export async function throwErrorToAdmin(msg: string) {
   await adminDM.send(msg)
-  clearInterval(getIntervalId())
+  clearInterval(intervalId.value)
 }

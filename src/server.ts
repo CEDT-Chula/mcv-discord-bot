@@ -19,7 +19,8 @@ export const client = new Client({
 })
 
 export let adminDM: DMChannel
-let intervalId: NodeJS.Timeout
+export let intervalId: MutableWrapper<NodeJS.Timeout | undefined> =
+  new MutableWrapper(undefined)
 let commands: DiscordCommandHandler
 
 client.on('interactionCreate', async (interaction: Interaction) => {
@@ -60,7 +61,7 @@ client.on('ready', async () => {
   adminDM.send('server is up!')
 
   if (isSome(await updateHandler())) {
-    intervalId = setInterval(updateHandler, env.DELAY * 1000)
+    intervalId.value = setInterval(updateHandler, env.DELAY * 1000)
   }
 })
 
@@ -74,8 +75,4 @@ export async function start() {
   // let channels = await db.getAllChannels();
   console.log('found commands', Object.keys(commands))
   client.login(env.DISCORD_TOKEN)
-}
-
-export function getIntervalId() {
-  return intervalId
 }
