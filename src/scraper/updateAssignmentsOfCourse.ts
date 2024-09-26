@@ -34,7 +34,7 @@ export default async function updateAssignmentsOfCourse(
   let hasNext = true
   for (let currentAssignmentItems = 5; hasNext; currentAssignmentItems += 5) {
     const scrapeResult = await scrapeAssignmentsOfPage(currentAssignmentItems)
-
+    
     if (scrapeResult == undefined) {
       break
     }
@@ -54,6 +54,7 @@ export default async function updateAssignmentsOfCourse(
       }, found)
     }
   }
+  console.log(mergedNewAssignments)
 
   return mergedNewAssignments
 }
