@@ -1,4 +1,3 @@
-// jest.mock("@/scraper/updateAll")
 const mockScrapeAssignmentsOfPage = jest.fn()
 const mockExtractAssignmentsFromCheerio = jest.fn()
 const mockFetchAndCatch = jest.fn()
@@ -37,33 +36,11 @@ jest.mock('@/scraper/extractAssignmentsFromCheerio', () => {
 })
 
 import { Assignment } from '@/database/database'
-import { updateAll } from '@/scraper/updateAll'
 import updateAssignmentsOfCourse from '@/scraper/updateAssignmentsOfCourse'
-import { Course } from '@prisma/client'
 describe('updateAll', () => {
-  let fetchAndCatchResponse: string
-  let coursesFromUpdate: Course[] = []
-  let assignmentsOfCourseFromUpdate: Record<string, Assignment[]> = {}
-
   let hasNext: boolean = false
   let scrapedAssignmentCourseId: number = 0
   let scrapedAssignments: Assignment[] = []
-
-  const updateAllSpy = jest.fn(updateAll)
-  const course123 = {
-    mcvID: 123,
-    courseID: '2111031',
-    title: 'How to Rickroll 101',
-    year: 2023,
-    semester: 2,
-  }
-  const course540 = {
-    mcvID: 540,
-    courseID: '2111032',
-    title: 'How to Make Mcv bot 101',
-    year: 2023,
-    semester: 2,
-  }
 
   const assignment456 = {
     mcvCourseID: 123,
@@ -104,15 +81,3 @@ describe('updateAll', () => {
     expect(result).toEqual(expected)
   })
 })
-
-function assertAndExpect(
-  result: unknown,
-  expected: string[],
-  updateAllSpy: jest.Mock
-) {
-  for (const expectedStr of expected) {
-    expect([...expectedStr].length).toBeLessThanOrEqual(2000)
-  }
-  expect(result).toEqual(expected)
-  expect(updateAllSpy).toHaveBeenCalledTimes(1)
-}
