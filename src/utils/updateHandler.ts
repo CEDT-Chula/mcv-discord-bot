@@ -2,21 +2,21 @@ import { DiscordAPIError, TextChannel } from 'discord.js'
 import db from '../database/database'
 import { updateAll } from '../scraper/updateAll'
 import { adminDM, client } from '../server'
-import { none, Option, some } from 'fp-ts/lib/Option'
 
 /**
  * @description update assignments and send message to all notification channels
+ * return true if there is no new assignments, else false. but if error happens return undefined
  *  */
-export default async function updateHandler(): Promise<Option<boolean>> {
+export default async function updateHandler(): Promise<boolean | undefined> {
   let messages: Array<string> = []
   try {
     messages = await updateAll()
   } catch (e) {
     console.trace(e)
-    return none
+    return undefined
   }
   if (messages.length == 0) {
-    return some(true)
+    return true
   }
   const channels = await db.getAllChannels()
   for (const message of messages) {
@@ -34,5 +34,5 @@ export default async function updateHandler(): Promise<Option<boolean>> {
       }
     }
   }
-  return some(false)
+  return false
 }

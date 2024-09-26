@@ -6,9 +6,8 @@ import {
   NEW_ASSIGNMENTS_MESSAGE_SIZE,
 } from '@/config/config'
 import db, { Assignment, Course } from '../database/database'
-import updateAssignments from './updateAssignments'
+import updateAssignmentsOfCourse from './updateAssignmentsOfCourse'
 import updateCourses from './updateCourses'
-import * as option from 'fp-ts/Option'
 import MutableWrapper from '@/utils/MutableWrapper'
 import { format } from 'util'
 
@@ -20,17 +19,30 @@ import { format } from 'util'
 export async function updateAll(): Promise<Array<string>> {
   await updateCourses()
   const coursesList = await db.getAllCoursesOfTargetSemester()
-  const coursesWithAssignments: Map<Course, Array<Assignment>> = new Map()
+  // const coursesWithAssignments: Map<Course, Array<Assignment>> = new Map()
+  const mcvIdToCourse: Map<number, Course> = new Map()
+  for (let course of coursesList) {
+    mcvIdToCourse.set(course.mcvID, course)
+  }
+  let mcvIdToNewAssignments: Map<number, Array<Assignment>> = new Map()
   for await (const course of coursesList) {
-    const newAssignments: option.Option<Assignment[]> = await updateAssignments(
-      course.mcvID
-    )
-    if (option.isNone(newAssignments) || newAssignments.value.length == 0) {
+    const newAssignments = await updateAssignmentsOfCourse(course.mcvID)
+    if (newAssignments == undefined || newAssignments.size == 0) {
       continue
     }
-    coursesWithAssignments.set(course, newAssignments.value)
+    for (let [mcvId, assignments] of newAssignments) {
+      if (assignments.length == 0) {
+        continue
+      }
+      if (!mcvIdToNewAssignments.has(mcvId)) {
+        mcvIdToNewAssignments.set(mcvId, assignments)
+      } else {
+        mcvIdToNewAssignments.get(mcvId)!.concat(assignments)
+      }
+    }
   }
-  if (coursesWithAssignments.size == 0) {
+
+  if (mcvIdToNewAssignments.size == 0) {
     return []
   }
   const messages: string[] = []
@@ -40,9 +52,12 @@ export async function updateAll(): Promise<Array<string>> {
   const currentMessageSize: MutableWrapper<number> = new MutableWrapper(
     NEW_ASSIGNMENTS_MESSAGE_SIZE
   )
-  for (const [course, assignments] of coursesWithAssignments) {
-    // const newCourseLine = `\n- ${course.title}`
-    const newCourseLine = format(COURSE_MESSAGE_PATTERN, course.title)
+  for (const [mcvId, assignments] of mcvIdToNewAssignments.entries()) {
+    const courseInformation = mcvIdToCourse.get(mcvId)!
+    const newCourseLine = format(
+      COURSE_MESSAGE_PATTERN,
+      courseInformation.title
+    )
     const newAssignmentLineSize = [...newCourseLine].length
     const hasExceeded =
       currentMessageSize.value + newAssignmentLineSize >
@@ -56,7 +71,7 @@ export async function updateAll(): Promise<Array<string>> {
       const newAssignmentLine = format(
         ASSIGNMENT_MESSAGE_PATTERN,
         assignment.assignmentName,
-        course.mcvID,
+        mcvId,
         assignment.assignmentID
       )
       const newAssignmentLineSize = [...newAssignmentLine].length

@@ -13,7 +13,7 @@ jest.mock('@/database/database', () => {
   }
 })
 
-jest.mock('@/scraper/updateAssignments', () => {
+jest.mock('@/scraper/updateAssignmentsOfCourse', () => {
   return {
     __esModule: true,
     default: mockUpdateAssignments,
@@ -23,10 +23,9 @@ jest.mock('@/scraper/updateAssignments', () => {
 import { Assignment } from '@/database/database'
 import { updateAll } from '@/scraper/updateAll'
 import { Course } from '@prisma/client'
-import { none, some } from 'fp-ts/lib/Option'
 describe('updateAll', () => {
   let coursesFromUpdate: Course[] = []
-  let assignmentsOfCourseFromUpdate: Record<number, Assignment[]> = {}
+  let assignmentsOfCourseFromUpdate: Record<string, Assignment[]> = {}
   const updateAllSpy = jest.fn(updateAll)
   const course123 = {
     mcvID: 123,
@@ -48,12 +47,11 @@ describe('updateAll', () => {
       () => coursesFromUpdate
     )
     mockUpdateAssignments.mockImplementation((mcvId: number) => {
-      const assignments = assignmentsOfCourseFromUpdate[mcvId]
-      if (assignments != undefined) {
-        return some(assignments)
-      } else {
-        return none
-      }
+      // to make mcvId key a number
+      const assignments = new Map([
+        [mcvId, assignmentsOfCourseFromUpdate[mcvId]],
+      ])
+      return assignments
     })
   })
 
@@ -120,7 +118,7 @@ describe('updateAll', () => {
 
   it('no new assignments', async () => {
     coursesFromUpdate = [course123]
-    assignmentsOfCourseFromUpdate = {}
+    assignmentsOfCourseFromUpdate = { 123: [] }
     const result = await updateAllSpy()
     const expected: string[] = []
     assertAndExpect(result, expected, updateAllSpy)

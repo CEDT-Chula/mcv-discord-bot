@@ -1,4 +1,3 @@
-import { option } from 'fp-ts'
 import env from '../env/env'
 import { hasEncounteredError } from '../server'
 import errorFetchingNotify from './errorFetchingNotify'
@@ -11,7 +10,7 @@ export default async function fetchAndCatch(
   url: string,
   method: string,
   body?: BodyInit
-): Promise<option.Option<Response>> {
+): Promise<Response | undefined> {
   const response = await fetch(url, {
     method: method,
     headers: {
@@ -26,16 +25,16 @@ export default async function fetchAndCatch(
     await errorFetchingNotify(NotifyMessage.FetchingError)
   })
   if (response == undefined) {
-    return option.none
+    return undefined
   }
   if (response.status != 200) {
     if (hasEncounteredError.value) {
-      return option.none
+      return undefined
     }
     hasEncounteredError.value = true
     await errorFetchingNotify(NotifyMessage.FetchingError)
-    return option.none
+    return undefined
   }
   hasEncounteredError.value = false
-  return option.some(response)
+  return response
 }

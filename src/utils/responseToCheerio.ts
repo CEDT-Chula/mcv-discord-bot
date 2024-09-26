@@ -1,20 +1,19 @@
-import { option } from 'fp-ts'
 import InvalidCookieError from './InvalidCookieError'
 import { isCookieInvalid } from './isCookieInvalid'
 import * as cheerio from 'cheerio'
 
 export default async function responseToCheerio(
-  optionalResponse: option.Option<Response>
-): Promise<option.Option<cheerio.Root>> {
-  if (option.isNone(optionalResponse)) {
-    return option.none
+  response: Response | undefined
+): Promise<cheerio.Root | undefined> {
+  if (response == undefined) {
+    return undefined
   }
 
-  const responseText = await optionalResponse.value.text()
+  const responseText = await response.text()
 
   const $ = cheerio.load(responseText)
   if (await isCookieInvalid($)) {
     throw new InvalidCookieError('InvalidCookie')
   }
-  return option.some($)
+  return $
 }
