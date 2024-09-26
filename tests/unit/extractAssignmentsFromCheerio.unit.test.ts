@@ -34,7 +34,7 @@ describe('parse assignments', () => {
     `
     const $ = cheerio.load(html)
     // console.log($('tbody tr td:nth-child(2) a').toArray())
-    await extractAssignmentsFromCheerio(123, $)
+    await extractAssignmentsFromCheerio($)
     expect(mockAssignmentExists).toHaveBeenCalledTimes(1)
     expect(mockSaveAssignment).toHaveBeenCalledTimes(1)
     expect(mockSaveAssignment).toHaveBeenCalledWith({
