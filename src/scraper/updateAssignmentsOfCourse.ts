@@ -54,7 +54,6 @@ export default async function updateAssignmentsOfCourse(
       }, found)
     }
   }
-  console.log(mergedNewAssignments)
 
   return mergedNewAssignments
 }
