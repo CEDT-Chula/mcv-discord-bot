@@ -70,7 +70,9 @@ export async function updateAll(): Promise<Array<string>> {
       // const newAssignmentLine = `\n - [${assignment.assignmentName}](https://www.mycourseville.com/?q=courseville/worksheet/${course.mcvID}/${assignment.assignmentID})`
       const newAssignmentLine = format(
         ASSIGNMENT_MESSAGE_PATTERN,
-        assignment.assignmentName,
+        assignment.assignmentName == ''
+          ? '(Nameless)'
+          : assignment.assignmentName,
         mcvId,
         assignment.assignmentID
       )
