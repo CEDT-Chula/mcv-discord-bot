@@ -15,7 +15,8 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
-      - name: 'Build Inventory Image'
+      - name: 'Build Image'
         run: |
-          docker build . --tag ghcr.io/${{github.actor}}/mcv-notifier-bot:latest
-          docker push ghcr.io/${{github.actor}}/mcv-notifier-bot:latest
+          REPO_LOWERCASE=${GITHUB_REPOSITORY,,}
+          docker build . --tag ghcr.io/$REPO_LOWERCASE/${GITHUB_SHA}:latest
+          docker push ghcr.io/$REPO_LOWERCASE/${GITHUB_SHA}:latest
