@@ -74,7 +74,7 @@ describe('updateAll', () => {
     const expected: string[] = [
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n  - [งานที่ 1](https://www.mycourseville.com/?q=courseville/worksheet/123/456)`,
+        `\n - [งานที่ 1](https://www.mycourseville.com/?q=courseville/worksheet/123/456)`,
     ]
     assertAndExpect(result, expected, updateAllSpy)
   })
@@ -101,9 +101,9 @@ describe('updateAll', () => {
     const expected: string[] = [
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n  - [งานที่ 1](https://www.mycourseville.com/?q=courseville/worksheet/123/456)` +
+        `\n - [งานที่ 1](https://www.mycourseville.com/?q=courseville/worksheet/123/456)` +
         '\n- How to Make Mcv bot 101' +
-        `\n  - [งานที่ 1 นะจ๊ะ](https://www.mycourseville.com/?q=courseville/worksheet/540/456)`,
+        `\n - [งานที่ 1 นะจ๊ะ](https://www.mycourseville.com/?q=courseville/worksheet/540/456)`,
     ]
     assertAndExpect(result, expected, updateAllSpy)
   })
@@ -149,12 +149,12 @@ describe('updateAll', () => {
     const expected = [
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n  - [${'ก'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/456)` +
-        `\n  - [${'ข'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/789)`,
+        `\n - [${'ก'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/456)` +
+        `\n - [${'ข'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/789)`,
 
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n  - [${'ค'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/150)`,
+        `\n - [${'ค'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/150)`,
     ]
     assertAndExpect(result, expected, updateAllSpy)
   })
@@ -171,7 +171,7 @@ describe('updateAll', () => {
         {
           mcvCourseID: 123,
           assignmentID: 789,
-          assignmentName: 'ข'.repeat(966),
+          assignmentName: 'ข'.repeat(968),
         },
         {
           mcvCourseID: 123,
@@ -184,12 +184,12 @@ describe('updateAll', () => {
     const expected = [
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n  - [${'ก'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/456)` +
-        `\n  - [${'ข'.repeat(966)}](https://www.mycourseville.com/?q=courseville/worksheet/123/789)`,
+        `\n - [${'ก'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/456)` +
+        `\n - [${'ข'.repeat(968)}](https://www.mycourseville.com/?q=courseville/worksheet/123/789)`,
 
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n  - [${'ค'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/150)`,
+        `\n - [${'ค'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/150)`,
     ]
     assertAndExpect(result, expected, updateAllSpy)
   })
@@ -206,7 +206,7 @@ describe('updateAll', () => {
         {
           mcvCourseID: 123,
           assignmentID: 789,
-          assignmentName: 'ข'.repeat(967),
+          assignmentName: 'ข'.repeat(969),
         },
         {
           mcvCourseID: 123,
@@ -219,12 +219,12 @@ describe('updateAll', () => {
     const expected = [
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n  - [${'ก'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/456)`,
+        `\n - [${'ก'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/456)`,
 
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n  - [${'ข'.repeat(967)}](https://www.mycourseville.com/?q=courseville/worksheet/123/789)` +
-        `\n  - [${'ค'.repeat(849)}](https://www.mycourseville.com/?q=courseville/worksheet/123/150)`,
+        `\n - [${'ข'.repeat(969)}](https://www.mycourseville.com/?q=courseville/worksheet/123/789)` +
+        `\n - [${'ค'.repeat(849)}](https://www.mycourseville.com/?q=courseville/worksheet/123/150)`,
     ]
     assertAndExpect(result, expected, updateAllSpy)
   })
@@ -256,12 +256,12 @@ describe('updateAll', () => {
     const expected = [
       '## New Assignments!!' +
         '\n- How to Rickroll 101' +
-        `\n  - [${'ก'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/456)` +
-        `\n  - [${'ข'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/789)`,
+        `\n - [${'ก'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/456)` +
+        `\n - [${'ข'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/123/789)`,
 
       '## New Assignments!!' +
         '\n- How to Make Mcv bot 101' +
-        `\n  - [${'ค'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/540/150)`,
+        `\n - [${'ค'.repeat(850)}](https://www.mycourseville.com/?q=courseville/worksheet/540/150)`,
     ]
     assertAndExpect(result, expected, updateAllSpy)
   })
