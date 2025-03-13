@@ -17,6 +17,5 @@ jobs:
 
       - name: 'Build Image'
         run: |
-          REPO_LOWERCASE=${GITHUB_REPOSITORY,,}
-          docker build . --tag ghcr.io/$REPO_LOWERCASE/${GITHUB_SHA}:latest
-          docker push ghcr.io/$REPO_LOWERCASE/${GITHUB_SHA}:latest
+          docker build . --tag ghcr.io/${{ github.event.repository.name }}/${GITHUB_SHA}:latest
+          docker push ghcr.io/${{ github.event.repository.name }}/${GITHUB_SHA}:latest
