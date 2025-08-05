@@ -51,9 +51,9 @@ export default async function updateCourses(): Promise<void> {
   )
 
   const resultObj = await result?.json()
-  if (resultObj==null){
+  if (resultObj == null) {
     console.warn(`Found ${resultObj} while reading courses`)
-    return;
+    return
   }
 
   try {
