@@ -4,9 +4,13 @@ global.fetch = jest.fn(async () => {
     text: async () => {
       return `
       <html>
-        <h2>2023/3</h2>
-        <h2>2023/2</h2>
-        <h2>2023/1</h2>
+      <section>
+      <select id="student-yearsem-select">
+        <option>2023/3</option>
+        <option>2023/2</option>
+        <option>2023/1</option>
+      </select>
+      </section>
       </html>
       `
     },
