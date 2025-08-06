@@ -17,7 +17,6 @@ import { format } from 'util'
  * @throws {Error}
  */
 export async function updateAll(): Promise<Array<string>> {
-  console.log("updating courses")
   await updateCourses()
   const coursesList = await db.getAllCoursesOfTargetSemester()
   // const coursesWithAssignments: Map<Course, Array<Assignment>> = new Map()
@@ -26,7 +25,6 @@ export async function updateAll(): Promise<Array<string>> {
     mcvIdToCourse.set(course.mcvID, course)
   }
   let mcvIdToNewAssignments: Map<number, Array<Assignment>> = new Map()
-  console.log("found courses:",coursesList)
   for await (const course of coursesList) {
     const newAssignments = await updateAssignmentsOfCourse(course.mcvID)
     if (newAssignments == undefined || newAssignments.size == 0) {

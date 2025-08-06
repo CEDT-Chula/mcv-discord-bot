@@ -11,7 +11,6 @@ export default async function fetchAndCatch(
   method: string,
   body?: BodyInit
 ): Promise<Response | undefined> {
-  console.log("fetching "+url+"...")
   const response = await fetch(url, {
     method: method,
     headers: {
@@ -37,7 +36,5 @@ export default async function fetchAndCatch(
     return undefined
   }
   hasEncounteredError.value = false
-
-  console.log("fetching "+url+" done...")
   return response
 }
