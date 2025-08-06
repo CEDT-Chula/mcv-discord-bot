@@ -6,7 +6,7 @@ jobs:
   pre_job:
     runs-on: ubuntu-latest
     concurrency: 
-      group: test_lint.${{ github.head_ref }}.${{ github.sha }}
+      group: test_lint.${{ github.sha }}
       cancel-in-progress: true
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
