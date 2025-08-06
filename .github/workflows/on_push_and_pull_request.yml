@@ -11,25 +11,22 @@ jobs:
       - id: skip_check
         uses: fkirc/skip-duplicate-actions@v3.4.0
         with:
+          concurrent_skipping: 'same_content'
           skip_after_successful_duplicate: 'true'
   build:
     needs: pre_job
-    concurrency: 
-      group: test_lint.${{ github.ref }}
-      cancel-in-progress: true
-    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 'latest'
-    - run: npm ci
-    - run: npm test
-    - run: npm run lint
-    - run: npm run checkStyle
-    - run: npm run build
-    - run: |
-        if ! [ -f build/start.js ]; then
-          exit 1;
-        fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run checkStyle
+      - run: npm run build
+      - run: |
+          if ! [ -f build/start.js ]; then
+            exit 1;
+          fi
