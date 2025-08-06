@@ -15,7 +15,7 @@ jobs:
   build:
     needs: pre_job
     concurrency: 
-      group: test_lint.${{ github.sha }}
+      group: test_lint.${{ github.ref }}
       cancel-in-progress: true
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
