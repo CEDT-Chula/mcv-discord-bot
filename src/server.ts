@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits } from 'discord.js'
+import { Client, GatewayIntentBits, MessageFlags } from 'discord.js'
 import type { DMChannel, Interaction } from 'discord.js'
 import { NotificationChannel } from './database/database'
 import { getCommands } from './discord/getCommands'
@@ -33,7 +33,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
     if (command != undefined) {
       await interaction.reply({
         content: 'working on it...',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       })
       const calledChannel: NotificationChannel = {
         guildID: interaction.guildId,
