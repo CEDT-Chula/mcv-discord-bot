@@ -24,7 +24,6 @@ export default async function extractAssignmentsFromCheerio(
       assignmentName: $(ele).text(),
       assignmentID: assignmentId,
     }
-    console.log('assignment', assignment)
     const found = await db.assignmentExists(assignment)
     if (!found) {
       console.log('found new assignment', assignment)
